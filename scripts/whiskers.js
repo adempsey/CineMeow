@@ -1,7 +1,9 @@
+//Front-end code
 var clips_data_JSON;
 var clips_data = [];
+var current_project_id = "someID number";
 
-//Clip Data Strcuture
+//Clip Data Structure
 var clip_ex = new Object();
 clip_ex.start_time = 15; //in ms
 clip_ex.end_time = 120;  //in ms
@@ -41,7 +43,7 @@ function updateClip(clip){
 }
 
 function convertDataToJSON(){
-	clips_data_JSON = "{clips: [";
+	clips_data_JSON = "{project_id:" + current_project_id +", clips: [";
 	for(var i = 0; i < clips_data.length; i ++){
 		clips_data_JSON += "{ ";
 		clips_data_JSON += "'clip_id' : " +         clips_data[i].clip_id;
