@@ -55,3 +55,28 @@ function convertDataToJSON(){
 	}
 	clips_data_JSON += "]}";
 }
+
+// intial loading
+
+function loadStart(event) {
+	// framework for how to start/end a clip @ a certain time
+	var starttime = 10;
+	var endtime = 15;
+
+	$("video").on('timeupdate', function() {
+		if(this.currentTime < starttime) {
+			this.currentTime = starttime;
+		}
+		if(this.currentTime > endtime) {
+			this.pause();
+		}
+	});
+}
+
+function init() {
+	$("video").on('loadedmetadata', loadStart);
+}
+
+$(document).ready(function() {
+	init();
+});
