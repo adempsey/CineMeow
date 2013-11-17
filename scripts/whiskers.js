@@ -56,7 +56,6 @@ function convertDataToJSON(){
 	clips_data_JSON += "]}";
 }
 
-<<<<<<< HEAD
 function convertJSONtoData(json){
 	var parsed = JSON.parse(infoJSON);
 	current_project_id = parsed.project_id;
