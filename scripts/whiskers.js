@@ -55,3 +55,17 @@ function convertDataToJSON(){
 	}
 	clips_data_JSON += "]}";
 }
+
+function getClipsJSON (){
+	return clips_data_JSON;
+}
+
+function getClipsObjectArray (){
+	return clips_data; //Warning: big security risk here, probably should clone; but the caveat is that deep cloning is a lot slower...
+}
+
+//Gonna needs:
+//Undo
+//Redo
+//Modify Clip
+//Request Play 
