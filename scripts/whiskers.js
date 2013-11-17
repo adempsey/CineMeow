@@ -1,3 +1,8 @@
+//Temp Code for prototype
+var current_clip;
+current_clip.start_time = 10;
+current_clip.end_time = 15;
+
 //Front-end code
 var clips_data_JSON;
 var clips_data = [];
@@ -56,6 +61,36 @@ function convertDataToJSON(){
 	clips_data_JSON += "]}";
 }
 
+function convertJSONtoData(json){
+	var parsed = JSON.parse(infoJSON);
+	current_project_id = parsed.project_id;
+	clips_data = parsed.clips;
+}
+
+// intial loading
+function loadStart(event) {
+	// framework for how to start/end a clip @ a certain time
+	var starttime = current_clip.start_time;//10;
+	var endtime = current_clip.end_time; //15;
+
+	$("video").on('timeupdate', function() {
+		if(this.currentTime < starttime) {
+			this.currentTime = starttime;
+		}
+		if(this.currentTime > endtime) {
+			this.pause();
+		}
+	});
+}
+
+function init() {
+	$("video").on('loadedmetadata', loadStart);
+}
+
+$(document).ready(function() {
+	init();
+});
+
 function getClipsJSON (){
 	return clips_data_JSON;
 }
@@ -66,6 +101,25 @@ function getClipsObjectArray (){
 
 //Gonna needs:
 //Undo
+function undo(){
+	//Send request to server for undo
+	var returnedJSON = "";
+	clips_data_JSON = returnedJSON;
+	convertJSONtoData(returnedJSON);
+}
 //Redo
+function redo(){
+	//Send request to server for redo
+	var returnedJSON = "";
+	clips_data_JSON = returnedJSON;
+	convertJSONtoData(returnedJSON);
+}
+
 //Modify Clip
+function clipWasModified(clip){
+	updateClip(clip);
+}
 //Request Play 
+function requestPlay(){
+	
+}
