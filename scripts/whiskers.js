@@ -1,3 +1,8 @@
+//Temp Code for prototype
+var current_clip;
+current_clip.start_time = 10;
+current_clip.end_time = 15;
+
 //Front-end code
 var clips_data_JSON;
 var clips_data = [];
@@ -63,11 +68,10 @@ function convertJSONtoData(json){
 }
 
 // intial loading
-
 function loadStart(event) {
 	// framework for how to start/end a clip @ a certain time
-	var starttime = 10;
-	var endtime = 15;
+	var starttime = current_clip.start_time;//10;
+	var endtime = current_clip.end_time; //15;
 
 	$("video").on('timeupdate', function() {
 		if(this.currentTime < starttime) {
