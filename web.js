@@ -36,6 +36,9 @@ app.listen(port, function() {
 });
 
 //Test public 
-//connect()
-//  .use(connect.static(__dirname + '/public'))
+//app.use(express.static(__dirname + '/public'));
+app.configure(function(){
+  app.use('/assets', express.static(__dirname + '/public/assets'));
+  app.use(express.static(__dirname + '/public'));
+});
 
