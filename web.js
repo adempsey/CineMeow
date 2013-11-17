@@ -1,11 +1,12 @@
 var express = require("express");
 var app = express();
 app.use(express.logger());
+app.use(express.bodyParser());
 app.set('title', 'CineMeow');
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
-var mongourl = process.env.MONGOHQ_URL;
+var mongourl = 'mongodb://admin:meowmeow@paulo.mongohq.com:10029/app19434598';
 var db = require('mongodb').Db.connect(mongourl, function(error, dbConnection) { db=dbConnection; });
 
 app.get('/', function(request, response) {
