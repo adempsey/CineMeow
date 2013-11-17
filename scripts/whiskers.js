@@ -56,6 +56,7 @@ function convertDataToJSON(){
 	clips_data_JSON += "]}";
 }
 
+<<<<<<< HEAD
 // intial loading
 
 function loadStart(event) {
@@ -80,3 +81,18 @@ function init() {
 $(document).ready(function() {
 	init();
 });
+=======
+function getClipsJSON (){
+	return clips_data_JSON;
+}
+
+function getClipsObjectArray (){
+	return clips_data; //Warning: big security risk here, probably should clone; but the caveat is that deep cloning is a lot slower...
+}
+
+//Gonna needs:
+//Undo
+//Redo
+//Modify Clip
+//Request Play 
+>>>>>>> fe324a400ea9bc7b61e8465765e13682db3a5244
