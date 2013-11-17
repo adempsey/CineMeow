@@ -19,14 +19,17 @@ function createNewProject(){
 	newProject.video_clips = [];
 	newProject.project_id = project_id_itter;
 	project_id_itter ++;
-	projects.unshift(newProject)
+	projects.unshift(newProject);
 }
 
 function addSourceVideoToProject(project_id, videoClip){
-	projects[project_id].video_clips.push([videoClip, source_video_id_itter]);
+	projects[project_id].video_clips.push({
+		"video": videoClip, 
+		"video_id" :source_video_id_itter,
+		"video_url" : "SOME URL LELELELE"});
 	source_video_id_itter ++;	
 	//Return id back to client? 
-	//Or manage ids another way.
+	//Or manage ids another way
 }
 
 //Add clips to project clips stack
