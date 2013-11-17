@@ -4,12 +4,9 @@ app.use(express.logger());
 app.set('title', 'CineMeow');
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
-<<<<<<< HEAD
-=======
 
 var mongourl = process.env.MONGOHQ_URL;
 var db = require('mongodb').Db.connect(mongourl, function(error, dbConnection) { db=dbConnection; });
->>>>>>> c3f469a8c9236caf73f0d158e22ba16502860e09
 
 app.get('/', function(request, response) {
 	response.render('index');
