@@ -1,13 +1,15 @@
 var express = require("express");
 var app = express();
 app.use(express.logger());
-app.use(express.bodyParser());
+app.set('title', 'CineMeow');
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
 
 var mongourl = process.env.MONGOHQ_URL;
 var db = require('mongodb').Db.connect(mongourl, function(error, dbConnection) { db=dbConnection; });
 
 app.get('/', function(request, response) {
-	response.send('meeeeeeeeowwwww');
+	response.render('index');
 });
 
 app.post('/newproject', function(req, res) {
