@@ -2,8 +2,8 @@ var express = require("express");
 var app = express();
 app.use(express.logger());
 app.set('title', 'CineMeow');
-app.set('views', __dirname + '/views')
-app.set('view engine', 'jade')
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
 
 app.get('/', function(request, response) {
 	response.render('index');
