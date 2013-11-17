@@ -56,6 +56,7 @@ function convertDataToJSON(){
 	clips_data_JSON += "]}";
 }
 
+<<<<<<< HEAD
 function convertJSONtoData(json){
 	var parsed = JSON.parse(infoJSON);
 	current_project_id = parsed.project_id;
@@ -63,6 +64,34 @@ function convertJSONtoData(json){
 }
 
 
+=======
+<<<<<<< HEAD
+// intial loading
+
+function loadStart(event) {
+	// framework for how to start/end a clip @ a certain time
+	var starttime = 10;
+	var endtime = 15;
+
+	$("video").on('timeupdate', function() {
+		if(this.currentTime < starttime) {
+			this.currentTime = starttime;
+		}
+		if(this.currentTime > endtime) {
+			this.pause();
+		}
+	});
+}
+
+function init() {
+	$("video").on('loadedmetadata', loadStart);
+}
+
+$(document).ready(function() {
+	init();
+});
+=======
+>>>>>>> 028918c95dc7e8d9815b53c1cdb132e22e225475
 function getClipsJSON (){
 	return clips_data_JSON;
 }
@@ -92,6 +121,10 @@ function clipWasModified(clip){
 	updateClip(clip);
 }
 //Request Play 
+<<<<<<< HEAD
 function requestPlay(){
 	
 }
+=======
+>>>>>>> fe324a400ea9bc7b61e8465765e13682db3a5244
+>>>>>>> 028918c95dc7e8d9815b53c1cdb132e22e225475
