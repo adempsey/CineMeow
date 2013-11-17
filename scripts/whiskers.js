@@ -56,6 +56,13 @@ function convertDataToJSON(){
 	clips_data_JSON += "]}";
 }
 
+function convertJSONtoData(json){
+	var parsed = JSON.parse(infoJSON);
+	current_project_id = parsed.project_id;
+	clips_data = parsed.clips;
+}
+
+
 function getClipsJSON (){
 	return clips_data_JSON;
 }
@@ -66,6 +73,25 @@ function getClipsObjectArray (){
 
 //Gonna needs:
 //Undo
+function undo(){
+	//Send request to server for undo
+	var returnedJSON = "";
+	clips_data_JSON = returnedJSON;
+	convertJSONtoData(returnedJSON);
+}
 //Redo
+function redo(){
+	//Send request to server for redo
+	var returnedJSON = "";
+	clips_data_JSON = returnedJSON;
+	convertJSONtoData(returnedJSON);
+}
+
 //Modify Clip
+function clipWasModified(clip){
+	updateClip(clip);
+}
 //Request Play 
+function requestPlay(){
+	
+}
