@@ -30,6 +30,33 @@ app.post('/newproject', function(req, res) {
 	});
 });
 
+app.post('/newclip', function(req, res) {
+	var ObjectID = require('mongodb').ObjectID;
+	var id = new ObjectID(req.body["id"]);
+	db.collection("projects", function(err, collection) {
+		collection.findOne({ "_id": id }, function(err, results) {
+			if (err || !results) {
+				console.log(err);
+				res.send(400);
+			} else {
+				var clipStats = {
+					"name": req.body["name"],
+					"start_time": req.body["start_time"],
+					"end_time": req.body["end_time"],
+					"source": req.body["source"]
+				}
+				results.clips.push(clipStats);
+				collection.update({"_id": id}, {$set: {"clips": results.clips}}, function (err) {
+					if (err) {
+						res.send(400);
+					}
+				});
+				res.send(200);
+			}
+		});
+	});
+});
+
 var port = process.env.PORT || 5000;
 app.listen(port, function() {
 	console.log("Listening on " + port);
