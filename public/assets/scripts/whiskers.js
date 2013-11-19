@@ -78,9 +78,6 @@ function loadStart(event) {
 	/*var starttime = current_clip.start_time;//10;
 	var endtime = current_clip.end_time; //15;*/
 
-	var starttime = 10; // this should pull from text box/sliders
-	var endtime = 15;
-
 	$("video").on('timeupdate', function() {
 		if(this.currentTime < starttime) {
 			this.currentTime = starttime;
@@ -117,6 +114,13 @@ $(document).ready(function() {
     });
 });
 
+function cutClip() {
+	$("video").get(0).pause();
+
+	starttime = $("#start").val();
+	endtime = $("#end").val();
+}
+
 function getClipsJSON (){
 	return clips_data_JSON;
 }
@@ -147,5 +151,19 @@ function clipWasModified(clip){
 }
 //Request Play 
 function requestPlay(){
-	
+	var dirty = 0;
+	$("video").get(0).play();
+	console.log(starttime);
+	console.log(endtime);
+	$("video").on('timeupdate', function() {
+		if(this.currentTime != starttime && dirty == 0) {
+			this.currentTime = starttime;
+			dirty = 1;
+		}
+		if(this.currentTime > endtime) {
+			dirty = 0;
+		}
+	});
 }
+
+conceal = function(){ /* nothing */ };

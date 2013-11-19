@@ -7,7 +7,10 @@ block content
 	form
 		div(id="slider", style="width: 500px; margin-left: auto; margin-right: auto; margin-top: 0px;")
 		div
-			input(type="text", class="sliderValue", data-index="0", value="10", onchange="console.log('hi1');")
-			input(type="text", class="sliderValue", data-index="1", value="15", onchange="console.log('hi2');")
+			input(type="text", id="start", class="sliderValue", data-index="0", value="10")
+			input(type="text", id="end", class="sliderValue", data-index="1", value="15")
+
+	button(type="button", onclick="cutClip();") Cut!
+	button(type="button", onclick="requestPlay();") Play!
 
 	script(src='/assets/scripts/whiskers.js')
