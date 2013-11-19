@@ -1,5 +1,13 @@
 extend layout
 block content
-	video(width='320', height='240', controls='controls')
+	video(width='500', height='380', controls='controls')
 		source(src='http://media.cinemeow.s3.amazonaws.com/eyebrows.mp4', type='video/mp4')
 			| Your browser does not support the video tag.
+
+	form
+		div(id="slider", style="width: 500px; margin-left: auto; margin-right: auto; margin-top: 0px;")
+		div
+			input(type="text", class="sliderValue", data-index="0", value="10", onchange="console.log('hi1');")
+			input(type="text", class="sliderValue", data-index="1", value="15", onchange="console.log('hi2');")
+
+	script(src='/assets/scripts/whiskers.js')
