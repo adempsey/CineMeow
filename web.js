@@ -60,6 +60,34 @@ app.post('/newclip', function(req, res) {
 	});
 });
 
+/* edit a clip's start and end points */
+app.post('/editclip', function(req, res) {
+	var ObjectID = mongo.ObjectID;
+	var id = new ObjectID(req.body["id"]);
+	db.collection("projects", function(err, collection) {
+		collection.findOne({"_id": id }, function(err, results) {
+			if (err || !results) {
+				console.log(err);
+				res.send(400);
+			} else {
+				for (var i in results.clips) { //this is kinda dumb haha we should fix it later
+					if (results.clips[i].name == req.body["name"]) {
+						results.clips[i].start_time = req.body["start_time"];
+						results.clips[i].end_time = req.body["end_time"];
+						break;
+					}
+				}
+				collection.update({"_id": id}, {$set: {"clips": results.clips}}, function (err) {
+					if (err) {
+						res.send(400);
+					}
+				});
+				res.send(200);
+			}
+		});
+	});
+});
+
 /* returns project data for a given project id */
 app.get('/project', function(req, res) {
 	var ObjectID = mongo.ObjectID;
