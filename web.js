@@ -13,6 +13,7 @@ app.get('/', function(request, response) {
 	response.render('index');
 });
 
+/* generates new project skeleton */
 app.post('/newproject', function(req, res) {
 	db.collection("projects", function(err, collection) {
 		collection.insert( {
@@ -30,6 +31,7 @@ app.post('/newproject', function(req, res) {
 	});
 });
 
+/* add clip to project's timeline */
 app.post('/newclip', function(req, res) {
 	var ObjectID = require('mongodb').ObjectID;
 	var id = new ObjectID(req.body["id"]);
@@ -52,6 +54,23 @@ app.post('/newclip', function(req, res) {
 					}
 				});
 				res.send(200);
+			}
+		});
+	});
+});
+
+/* returns project data for a given project id */
+app.get('/project', function(req, res) {
+	var ObjectID = require('mongodb').ObjectID;
+	var id = new ObjectID(req.query.id);
+	console.log(id);
+	db.collection("projects", function(err, collection) {
+		collection.findOne({"_id": id}, function(err, results) {
+			if (err || !results) {
+				console.log(err+" ** "+results);
+				res.send(400);
+			} else {
+				res.send(results);
 			}
 		});
 	});
