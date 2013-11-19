@@ -6,8 +6,9 @@ app.set('title', 'CineMeow');
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
+var mongo = require('mongodb');
 var mongourl = 'mongodb://admin:meowmeow@paulo.mongohq.com:10029/app19434598';
-var db = require('mongodb').Db.connect(mongourl, function(error, dbConnection) { db=dbConnection; });
+var db = mongo.Db.connect(mongourl, function(error, dbConnection) { db=dbConnection; });
 
 app.get('/', function(request, response) {
 	response.render('index');
@@ -33,7 +34,7 @@ app.post('/newproject', function(req, res) {
 
 /* add clip to project's timeline */
 app.post('/newclip', function(req, res) {
-	var ObjectID = require('mongodb').ObjectID;
+	var ObjectID = mongo.ObjectID;
 	var id = new ObjectID(req.body["id"]);
 	db.collection("projects", function(err, collection) {
 		collection.findOne({ "_id": id }, function(err, results) {
@@ -61,7 +62,7 @@ app.post('/newclip', function(req, res) {
 
 /* returns project data for a given project id */
 app.get('/project', function(req, res) {
-	var ObjectID = require('mongodb').ObjectID;
+	var ObjectID = mongo.ObjectID;
 	var id = new ObjectID(req.query.id);
 	console.log(id);
 	db.collection("projects", function(err, collection) {
