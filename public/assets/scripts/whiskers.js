@@ -72,24 +72,11 @@ function convertJSONtoData(json){
 // intial loading
 var starttime = 10;
 var endtime = 15;
-
-function loadStart(event) {
-	// framework for how to start/end a clip @ a certain time
-	/*var starttime = current_clip.start_time;//10;
-	var endtime = current_clip.end_time; //15;*/
-
-	$("video").on('timeupdate', function() {
-		if(this.currentTime < starttime) {
-			this.currentTime = starttime;
-		}
-		if(this.currentTime > endtime) {
-			this.pause();
-		}
-	});
-}
+var starttime2 = 20;
+var endtime2 = 24;
 
 function init() {
-	$("video").on('loadedmetadata', loadStart);
+	$("video").on('loadedmetadata', requestPlay);
 }
 
 $(document).ready(function() {
@@ -108,17 +95,42 @@ $(document).ready(function() {
         }
     });
 
+	$("#slider2").slider({
+        min: 0,
+        max: 39, // this should be currentclip.totalTime
+        step: 1,
+        values: [20, 24],
+        slide: function(event, ui) {
+            $("input.sliderValue[data-index=2]").val(ui.values[0]);
+            $("input.sliderValue[data-index=3]").val(ui.values[1]);
+        }
+    });
+
     $("input.sliderValue").change(function() {
         var $this = $(this);
         $("#slider").slider("values", $this.data("index"), $this.val());
     });
 });
 
-function cutClip() {
+function cutClip(clip_id) {
 	$("video").get(0).pause();
+	console.log("cut");
+	console.log(clip_id);
 
-	starttime = $("#start").val();
-	endtime = $("#end").val();
+	if(clip_id == 1) {
+		starttime = $("#start").val();
+		endtime = $("#end").val();
+
+		console.log("start" + starttime);
+		console.log("end" + endtime);
+	}
+	if(clip_id == 2) {
+		starttime2 = $("#start2").val();
+		endtime2 = $("#end2").val();
+
+		console.log("start2" + starttime2);
+		console.log("end2" + endtime2);
+	}
 }
 
 function getClipsJSON (){
@@ -153,17 +165,21 @@ function clipWasModified(clip){
 function requestPlay(){
 	var dirty = 0;
 	$("video").get(0).play();
-	console.log(starttime);
-	console.log(endtime);
+
 	$("video").on('timeupdate', function() {
 		if(this.currentTime != starttime && dirty == 0) {
 			this.currentTime = starttime;
 			dirty = 1;
 		}
-		if(this.currentTime > endtime) {
-			dirty = 0;
+		if(this.currentTime > endtime && dirty == 1) {
+			this.currentTime = starttime2;
+			console.log("play 2nd clip");
+			this.play();
+			dirty = 2;
+		}
+		if(this.currentTime > endtime2 && dirty == 2) {
+			console.log("pause 2nd clip");
+			this.pause();
 		}
 	});
 }
-
-conceal = function(){ /* nothing */ };
