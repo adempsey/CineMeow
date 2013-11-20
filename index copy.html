@@ -25,6 +25,7 @@
     height: 75px;
     border: 1px solid gray;
     background-color: #E0F0FF;
+    padding-right: 10px;
 }
 
 </style>
@@ -57,7 +58,9 @@ $(function () {
                 });
         });
         $("div[id^='drag']").resizable({
-       		handles: 'e, w'
+       		handles: 'e, w', 
+       		minWidth: 15, //maxwidth will be determined by video clip!
+       		containment: "#drag-x"
     	}); 
         $(".clip").mouseover(function () {
         	$(this).css('opacity', '1');
@@ -65,7 +68,7 @@ $(function () {
         $(".clip").mouseout(function () {
         	$(this).css('opacity', '.7');
         });
-        $( ".slider-range" ).slider({
+        /*$( ".slider-range" ).slider({
 			range: true,
 			min: 0,
 			max: 500,
@@ -76,12 +79,13 @@ $(function () {
 		});
 		$( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
 			" - $" + $( "#slider-range" ).slider( "values", 1 ) );
+		*/
 		});
 </script>
  
 <!-- HTML -->
 <div style="float:left;margin-left:30px;">
-    X axis only
+    OMG SUCH DEMO 
     <div id="drag-x">   
         <div id="drag2" class="drag clip" style="background-color:orange">
         	Clip 1
