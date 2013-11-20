@@ -10,6 +10,18 @@ var mongo = require('mongodb');
 var mongourl = 'mongodb://admin:meowmeow@paulo.mongohq.com:10029/app19434598';
 var db = mongo.Db.connect(mongourl, function(error, dbConnection) { db=dbConnection; });
 
+//Test public 
+//app.use(express.static(__dirname + '/public'));
+app.configure(function(){
+	app.use('/assets', express.static(__dirname + '/public/assets'));
+	app.use(express.static(__dirname + '/public'));
+	app.use(function(request, response, next) {
+		response.header("Access-Control-Allow-Origin", "*");
+		response.header("Access-Control-Allow-Headers", "X-Requested-With");
+		next();
+	});
+});
+
 app.get('/', function(request, response) {
 	response.render('index');
 });
@@ -70,6 +82,7 @@ app.post('/editclip', function(req, res) {
 				console.log(err);
 				res.send(400);
 			} else {
+				var clip = results.clips.indexOf(req.bo)
 				for (var i in results.clips) { //this is kinda dumb haha we should fix it later
 					if (results.clips[i].name == req.body["name"]) {
 						results.clips[i].start_time = req.body["start_time"];
@@ -110,10 +123,4 @@ app.listen(port, function() {
 	console.log("Listening on " + port);
 });
 
-//Test public 
-//app.use(express.static(__dirname + '/public'));
-app.configure(function(){
-  app.use('/assets', express.static(__dirname + '/public/assets'));
-  app.use(express.static(__dirname + '/public'));
-});
 
