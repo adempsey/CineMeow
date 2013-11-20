@@ -65,3 +65,4 @@ function getCurrentClips(project_id){
 	return projects[project_id].clips_stack[0];
 }
 
+
