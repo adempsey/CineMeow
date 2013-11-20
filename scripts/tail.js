@@ -90,5 +90,6 @@ function getProjectFromServer (){
 }
 
 function test(){
+	console.log("Testing server protocols:");
 	getProjectFromServer();
 }
