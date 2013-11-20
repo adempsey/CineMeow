@@ -9,7 +9,7 @@ var source_video_id_itter = 0; // Should be updated by a file?
 var project_ex = new Object();
 project_ex.clips_stack = []; //time signature collections
 project_ex.clips_redo_stack = [];
-projext_ex.project_id = "some id";
+project_ex.project_id = "some id";
 project_ex.video_clips = []; //actual videos
 
 function createNewProject(){
