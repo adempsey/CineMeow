@@ -66,23 +66,29 @@ function getCurrentClips(project_id){
 }
 
 
-function getFromServer (){
+function getProjectFromServer (){
+	var id = qweqwe; //Id of project?
 	$.ajax({
 	        type: "GET",
-	        url: "http://infinite-waters-4536.herokuapp.com/adduser.json",
-	        data: "email=" + $('#email').val() + "&password=" + $('#password').val() +
-	                        "&password_confirm=" + $('#password_confirm').val(),
+	        url: "http://http://cinemeow.herokuapp.com/project",
+	        //data: "id=" + $('#email').val() + "&password=" + $('#password').val() +
+	        //                "&password_confirm=" + $('#password_confirm').val(),
+	        data: "id=" + id;
 	        success: function (msg) {
 	                console.log("Success " + msg);
 	        },
 	        error: function(XMLHttpRequest, textStatus, errorThrown) {
-	                if ($('#email').val().length == 0 || $('#password').val().length == 0
+	               /* if ($('#email').val().length == 0 || $('#password').val().length == 0
 	                        || $('#password_confirm').val().length == 0) {
 	                        $('#form_warning').text("Please fill in all fields");
 	                } else {
 	                        $('#form_warning').text("There are some errors in the form. Please see red text");
 	                }
-	                $('#form_warning').fadeIn('fast');
+	                $('#form_warning').fadeIn('fast');*/
 	        }
 	});
+}
+
+function test(){
+	getProjectFromServer();
 }
