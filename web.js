@@ -10,6 +10,12 @@ var mongo = require('mongodb');
 var mongourl = 'mongodb://admin:meowmeow@paulo.mongohq.com:10029/app19434598';
 var db = mongo.Db.connect(mongourl, function(error, dbConnection) { db=dbConnection; });
 
+app.all('/', function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	next();
+});
+
 app.get('/', function(request, response) {
 	response.render('index');
 });
@@ -70,6 +76,7 @@ app.post('/editclip', function(req, res) {
 				console.log(err);
 				res.send(400);
 			} else {
+				var clip = results.clips.indexOf(req.bo)
 				for (var i in results.clips) { //this is kinda dumb haha we should fix it later
 					if (results.clips[i].name == req.body["name"]) {
 						results.clips[i].start_time = req.body["start_time"];
