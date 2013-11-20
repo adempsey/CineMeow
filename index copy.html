@@ -62,6 +62,12 @@ $(function () {
        		minWidth: 15, //maxwidth will be determined by video clip!
        		containment: "#drag-x"
     	}); 
+    	$(".clip").resize(function(e){
+    		var position = $(this).offset();
+    		//e.stopPropagation();
+    		//$(this).text("");
+     		$(info).text("left:" + position.left);
+		} );
         $(".clip").mouseover(function () {
         	$(this).css('opacity', '1');
         });
@@ -95,4 +101,6 @@ $(function () {
         	Clip 2
         </div>   
     </div>   
+    <div id="info">
+    </div>
 </div>
