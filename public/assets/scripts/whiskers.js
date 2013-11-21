@@ -205,6 +205,9 @@ $(function () {
                 //e.stopPropagation();
                 //$(this).text("");
                 $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
+                var id num = $(this).attr('id').substring(5);//"drag"
+                console.log("IDNUM " + id num);
+                //$("#start" + i).val();
             } );
             $(".clip").bind("drag", function(e){
                 var position = $(this).offset();
