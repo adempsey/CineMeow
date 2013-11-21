@@ -69,7 +69,7 @@ function getProjectFromServer (){
 	var id = "528a6b61e8f3c650ef000001"; //Id of project?
 	$.ajax({
 	        type: "GET",
-	        url: "http://http://cinemeow.herokuapp.com/project",
+	        url: "http://http://cinemeow.herokuapp.com/project?",
 	        //data: "id=" + $('#email').val() + "&password=" + $('#password').val() +
 	        //                "&password_confirm=" + $('#password_confirm').val(),
 	        data: "id=" + id,
