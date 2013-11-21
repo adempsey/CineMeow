@@ -187,18 +187,21 @@ $(function () {
                 $("#info").text("start:" + start + " end: " + (start+width) + " length: "+ width);
                 var idnum2 = $(this).attr('id');//.substring(5);//"drag"
                 var idnum = idnum2.substring(4);//"drag"
-
                 $("#start" + idnum).val(start);
                 $("#end" + idnum).val((start+width));
             } );
             $(".clip").bind("drag", function(e){
-                var position = $(this).offset();
+                 var position = $(this).offset();
                 var offset = $("#drag-x").offset().left;
-                var start = (position.left - offset) /scalingFactor - 0;
-                var width = $(this).width() /scalingFactor;
+                var start = (position.left - offset) / scalingFactor - 0; 
+                var width = $(this).width() / scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
                 $("#info").text("start:" + start + " end: " + (start+width) + " length: "+ width);
+                var idnum2 = $(this).attr('id');//.substring(5);//"drag"
+                var idnum = idnum2.substring(4);//"drag"
+                $("#start" + idnum).val(start);
+                $("#end" + idnum).val((start+width));
                 /*
                 var position = $(this).offset();
                 var start = position.left - 14; // TODO
