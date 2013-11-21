@@ -10,10 +10,16 @@ var mongo = require('mongodb');
 var mongourl = 'mongodb://admin:meowmeow@paulo.mongohq.com:10029/app19434598';
 var db = mongo.Db.connect(mongourl, function(error, dbConnection) { db=dbConnection; });
 
-app.all('/', function(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	next();
+//Test public 
+//app.use(express.static(__dirname + '/public'));
+app.configure(function(){
+	app.use('/assets', express.static(__dirname + '/public/assets'));
+	app.use(express.static(__dirname + '/public'));
+	app.use(function(request, response, next) {
+		response.header("Access-Control-Allow-Origin", "*");
+		response.header("Access-Control-Allow-Headers", "X-Requested-With");
+		next();
+	});
 });
 
 app.get('/', function(request, response) {
@@ -117,10 +123,4 @@ app.listen(port, function() {
 	console.log("Listening on " + port);
 });
 
-//Test public 
-//app.use(express.static(__dirname + '/public'));
-app.configure(function(){
-  app.use('/assets', express.static(__dirname + '/public/assets'));
-  app.use(express.static(__dirname + '/public'));
-});
 
