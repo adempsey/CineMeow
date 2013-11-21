@@ -202,8 +202,8 @@ $(function () {
                 $("#log").append('<input type="text" id="end'+i+'" value="'+project.clips[i]["end_time"]+'"><br/>');
             }
             for (var i in project.clips) {
-   				$("#drag"+i).offset(left:project.clips[i]["start_time"]);
-                //$("#drag"+i).width(project.clips[i]["end_time"]-left:project.clips[i]["start_time"]);
+   				$("#drag"+i).offset({left: project.clips[i]["start_time"]});
+                $("#drag"+i).width(project.clips[i]["end_time"]-project.clips[i]["start_time"]);
             }
 
             $("#dragbasic div[id^='drag']").draggable({
