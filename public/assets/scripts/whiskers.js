@@ -161,6 +161,7 @@ $(function () {
                         console.log("saving clips!");
                         saveClips();
                     }
+                    //TODO: MOVE DRAG FUNCTION IN HERE
             });
      
             /* make draggable div always on top */
