@@ -199,7 +199,8 @@ $(function () {
             }); 
             $(".clip").resize(function(e){
                 var position = $(this).offset();
-                var start = (position.left - $("#drag-x").position.left) ; // TODO
+                var offset = $("#drag-x").position.left;
+                var start = position.left - offset ; // TODO
                 var width = $(this).width() / scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
@@ -207,11 +208,19 @@ $(function () {
             } );
             $(".clip").bind("drag", function(e){
               var position = $(this).offset();
-                var start = (position.left - $("#drag-x").position.left); // TODO
-                var width = $(this).width() / scalingFactor;
+                var start = position.left; // TODO
+                var width = $(this).width();
                 //e.stopPropagation();
                 //$(this).text("");
                 $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
+                /*
+                var position = $(this).offset();
+                var start = position.left - 14; // TODO
+                var width = $(this).width();
+                //e.stopPropagation();
+                //$(this).text("");
+                $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
+                */
             } );
             $(".clip").mouseover(function () {
                 //$(this).css('opacity', '1');

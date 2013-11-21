@@ -64,13 +64,13 @@ app.post('/editproject', function(req, res) {
 	var ObjectID = mongo.ObjectID;
 	var id = new ObjectID(req.body["id"]);
 	var data = JSON.parse(req.body['data']);
+	console.log("***RECEIEVED "+data);
 	db.collection("projects", function(err, collection) {
 		collection.findOne({"_id": id}, function(err, results) {
 			if (err || !results) {
 				console.log(err);
 				res.send(400);
 			} else {
-				console.log(data);
 				collection.update({"_id": id}, data, function(err) {
 					if (err) {
 						res.send(400);
