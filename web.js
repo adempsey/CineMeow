@@ -64,7 +64,8 @@ app.post('/editproject', function(req, res) {
 	var ObjectID = mongo.ObjectID;
 	var id = new ObjectID(req.body["id"]);
 	var data = JSON.parse(req.body['data']);
-	console.log("***RECEIEVED "+data);
+	delete data["_id"];
+	console.log("***RECEIEVED "+req.body['data']);
 	db.collection("projects", function(err, collection) {
 		collection.findOne({"_id": id}, function(err, results) {
 			if (err || !results) {
@@ -73,6 +74,7 @@ app.post('/editproject', function(req, res) {
 			} else {
 				collection.update({"_id": id}, data, function(err) {
 					if (err) {
+						console.log("error updating: "+err);
 						res.send(400);
 					}
 				});
