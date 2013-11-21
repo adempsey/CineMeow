@@ -204,6 +204,7 @@ $(function () {
             for (var i in project.clips) {
    				$("#drag"+i).offset({left: project.clips[i]["start_time"]});
                 $("#drag"+i).width(project.clips[i]["end_time"]-project.clips[i]["start_time"]);
+                console.log("width " + (project.clips[i]["end_time"]-project.clips[i]["start_time"]);
             }
 
             $("#dragbasic div[id^='drag']").draggable({
