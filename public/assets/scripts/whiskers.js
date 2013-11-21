@@ -105,7 +105,6 @@ function requestPlay(){
 		endtime = $("#end" + i).val();
 
 		if(this.currentTime != starttime && dirty == 0) {
-				console.log(i);
 			this.currentTime = starttime;
 			dirty = 1;
 		}
