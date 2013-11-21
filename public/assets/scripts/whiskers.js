@@ -238,8 +238,8 @@ $(function () {
             }); 
             $(".clip").resize(function(e){
                 var position = $(this).offset();
-                var start = (position.left - $("#drag-x").position.left)*scalingFactor; // TODO
-                var width = $(this).width() * scalingFactor;
+                var start = 1.0 * (position.left - $("#drag-x").position.left)/scalingFactor; // TODO
+                var width = 1.0 * $(this).width() / scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
                 $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
