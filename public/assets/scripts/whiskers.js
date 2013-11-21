@@ -1,23 +1,3 @@
-/*
-//Temp Code for prototype
-var current_clip;
-current_clip.start_time = 10;
-current_clip.end_time = 15;
-
-//Front-end code
-var clips_data_JSON;
-var clips_data = [];
-var current_project_id = "someID number";
-
-//Clip Data Structure
-var clip_ex = new Object();
-clip_ex.start_time = 15; //in ms
-clip_ex.end_time = 120;  //in ms
-clip_ex.source_video_id = "someID";
-clip_ex.clip_id = "someIDAs well";
-ciip_ex.filters = " ";//{};// array of filter info, will get into later
-*/
-
 //Adds video at correct location, and generates an ID for it?
 function addClipToData(clip){
 	//Insert clip in chronological index\
@@ -142,36 +122,23 @@ function requestPlay(){
 	$("video").on('timeupdate', function() {
 		if(i == project.clips.length) {
 			this.pause();
+			i = 0;
 			return false;
 		}
 
-		starttime = project.clips[i]["start_time"];
-		endtime = project.clips[i]["end_time"];
+		starttime = $("#start" + i).val();
+		endtime = $("#end" + i).val();
 
 		if(this.currentTime != starttime && dirty == 0) {
+				console.log(i);
 			this.currentTime = starttime;
 			dirty = 1;
 		}
 
-		if(this.currentTime > endtime && dirty == 1) {
+		if(this.currentTime > endtime && dirty == 1) {;
 			dirty = 0;
 			i++;
 		}
-	});
-
-	$("video").on('timeupdate', function() {
-		/*if(this.currentTime != starttime && dirty == 0) {
-			this.currentTime = starttime;
-			dirty = 1;
-		}
-		if(this.currentTime > endtime && dirty == 1) {
-			this.currentTime = starttime2;
-			this.play();
-			dirty = 2;
-		}
-		if(this.currentTime > endtime2 && dirty == 2) {
-			this.pause();
-		}*/
 	});
 }
 
@@ -185,6 +152,7 @@ $(function () {
     	url: "http://cinemeow.herokuapp.com/project?id=528a6b61e8f3c650ef000001",
 	    success: function(data) {
             project = data;
+            console.log(project);
             $('#title').text(project.name);
             $('#created_at').text("Created on "+project.created_at);  
             for (var i in project.clips) {
@@ -269,3 +237,20 @@ $(function () {
 		" - $" + $( "#slider-range" ).slider( "values", 1 ) );
 	*/
 	});
+
+function saveClips() {
+	console.log(project);
+	var projectJSON;
+	for(var i = 0; i < project.clips.length; i++) {
+		project.clips[i]["start_time"] = $("#start" + i).val();
+		project.clips[i]["end_time"] = $("#end" + i).val();
+	}
+
+	projectJSON = JSON.stringify(project);
+	console.log(projectJSON);
+
+	$.post( "http://cinemeow.herokuapp.com/editproject", projectJSON)
+		.done(function( data ) {
+			alert( "Data Loaded: " + data );
+		});
+}
