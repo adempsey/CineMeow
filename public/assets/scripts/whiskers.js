@@ -125,6 +125,9 @@ $(function () {
     /* basic */
 
     var scalingFactor = 10;
+    var rtime = new Date(1, 1, 2000, 12,00,00);
+    var timeout = false;
+    var delta = 200;
     $.ajax({
     	type: "GET",
     	url: "http://cinemeow.herokuapp.com/project?id=528a6b61e8f3c650ef000001",
@@ -192,7 +195,21 @@ $(function () {
                 var idnum = idnum2.substring(4);//"drag"
                 $("#start" + idnum).val(start);
                 $("#end" + idnum).val((start+width));
+
+                rtime = new Date();
+                if (timeout === false) {
+                    timeout = true;
+                    setTimeout(resizeend, delta);
+                }
             } );
+            function resizeend() {
+                if (new Date() - rtime < delta) {
+                    setTimeout(resizeend, delta);
+                } else {
+                    timeout = false;
+                    saveClips();
+                }               
+            }
             $(".clip").bind("drag", function(e){
                  var position = $(this).offset();
                 var offset = $("#drag-x").offset().left;
