@@ -151,7 +151,11 @@ $(function () {
 
             $("#dragbasic div[id^='drag']").draggable({
                 containment: "#dragbasic",
-                stack: ".drag"
+                stack: ".drag", 
+                 stop: function() {
+                    console.log("saving clips!");
+                    saveClips();
+                }
             });
 
             /* X axis only */
