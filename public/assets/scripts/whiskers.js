@@ -246,8 +246,9 @@ $(function () {
                 $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
             } );
             $(".clip").bind("drag", function(e){
-              var position = $(this).offset();
-                var start = position.left; // TODO
+                var position = $(this).offset();
+                var offset = $("#drag-x").offset().left;
+                var start = position.left - offset; // TODO
                 var width = $(this).width() /scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
