@@ -26,6 +26,62 @@ app.get('/', function(request, response) {
 	response.render('index');
 });
 
+/* returns project data for a given project id */
+app.get('/project', function(req, res) {
+	var ObjectID = mongo.ObjectID;
+	var id = new ObjectID(req.query.id);
+	db.collection("projects", function(err, collection) {
+		collection.findOne({"_id": id}, function(err, results) {
+			if (err || !results) {
+				console.log(err+" ** "+results);
+				res.send(400);
+			} else {
+				res.send(results);
+			}
+		});
+	});
+});
+
+/* generates new project skeleton */
+app.post('/newproject', function(req, res) {
+	db.collection("projects", function(err, collection) {
+		collection.insert( {
+			name: req.body["name"],
+			created_at: (new Date()).toString(),
+			clips: []
+		}, function(err, inserted) {
+			if (err) {
+				console.log(err);
+				res.send(400);
+			} else {
+				res.send(200);
+			}
+		});
+	});
+});
+
+app.post('/editproject', function(req, res) {
+	var ObjectID = mongo.ObjectID;
+	var id = new ObjectID(req.body["id"]);
+	var data = JSON.parse(req.body['data']);
+	db.collection("projects", function(err, collection) {
+		collection.findOne({"_id": id}, function(err, results) {
+			if (err || !results) {
+				console.log(err);
+				res.send(400);
+			} else {
+				console.log(data);
+				collection.update({"_id": id}, data, function(err) {
+					if (err) {
+						res.send(400);
+					}
+				});
+				res.send(200);
+			}
+		});
+	});
+});
+
 // /* add clip to project's timeline */
 // app.post('/newclip', function(req, res) {
 // 	var ObjectID = mongo.ObjectID;
@@ -82,62 +138,6 @@ app.get('/', function(request, response) {
 // 		});
 // 	});
 // });
-
-/* returns project data for a given project id */
-app.get('/project', function(req, res) {
-	var ObjectID = mongo.ObjectID;
-	var id = new ObjectID(req.query.id);
-	db.collection("projects", function(err, collection) {
-		collection.findOne({"_id": id}, function(err, results) {
-			if (err || !results) {
-				console.log(err+" ** "+results);
-				res.send(400);
-			} else {
-				res.send(results);
-			}
-		});
-	});
-});
-
-/* generates new project skeleton */
-app.post('/newproject', function(req, res) {
-	db.collection("projects", function(err, collection) {
-		collection.insert( {
-			name: req.body["name"],
-			created_at: (new Date()).toString(),
-			clips: []
-		}, function(err, inserted) {
-			if (err) {
-				console.log(err);
-				res.send(400);
-			} else {
-				res.send(200);
-			}
-		});
-	});
-});
-
-app.post('/editproject', function(req, res) {
-	var ObjectID = mongo.ObjectID;
-	var id = new ObjectID(req.body["id"]);
-	var data = JSON.parse(req.body['data']);
-	db.collection("projects", function(err, collection) {
-		collection.findOne({"_id": id}, function(err, results) {
-			if (err || !results) {
-				console.log(err);
-				res.send(400);
-			} else {
-				console.log(data);
-				collection.update({"_id": id}, data, function(err) {
-					if (err) {
-						res.send(400);
-					}
-				});
-				res.send(200);
-			}
-		});
-	});
-});
 
 var port = process.env.PORT || 5000;
 app.listen(port, function() {
