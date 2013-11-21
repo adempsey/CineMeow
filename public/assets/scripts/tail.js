@@ -66,7 +66,7 @@ function getCurrentClips(project_id){
 }
 
 function getProjectFromServer (){
-	var id = qweqwe; //Id of project?
+	var id = "528a6b61e8f3c650ef000001"; //Id of project?
 	$.ajax({
 	        type: "GET",
 	        url: "http://http://cinemeow.herokuapp.com/project",
