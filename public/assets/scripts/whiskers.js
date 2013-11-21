@@ -184,58 +184,77 @@ function requestPlay(){
 	});
 }
 
-// test draggies
 $(function () {
+
         /* basic */
-        $("#dragbasic div[id^='drag']").draggable({
-                containment: "#dragbasic",
-                stack: ".drag"
-        });
- 
-        /* X axis only */
-        $("#drag-x div[id^='drag']").draggable({
-                containment: "#drag-x",
-                stack: ".drag",
-                axis: "x",
-                grid: [1,1],  
-                snap: true,
-                snapTolerance: 5  
-        });
- 
-        /* make draggable div always on top */
-        $("div[id^='drag']").mousedown(function () {
-                $("div[id^='drag']").each(function () {
-                        var seq = $(this).attr("id").replace("drag", "");
-                        $(this).css('z-index', seq);
+
+        $.ajax({
+            type: "GET",
+            url: "http://cinemeow.herokuapp.com/project?id=528a6b61e8f3c650ef000001",
+            success: function(data) {
+                project = data;
+                $('#title').text(project.name);
+                $('#created_at').text("Created on "+project.created_at);   
+                for (var i in project.clips) {
+                    var clip=project.clips[i];
+                    var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
+                    $("#drag-x").append('<div id="drag'+i+'" class="drag clip" style="background-color:'+color+'">'+clip.name+'</div>');
+                }
+
+                $("#dragbasic div[id^='drag']").draggable({
+                    containment: "#dragbasic",
+                    stack: ".drag"
                 });
-        });
-        $(".clip").resizable({
-       		handles: 'e, w', 
-       		minWidth: 15, //maxwidth will be determined by video clip!
-       		minHeight: 70,
-       		containment: "#drag-x"
-    	}); 
-    	$(".clip").resize(function(e){
-    		var position = $(this).offset();
-    		var start = position.left - 44;
-    		var width = $(this).width();
-    		//e.stopPropagation();
-    		//$(this).text("");
-     		$(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
-		} );
-		$(".clip").bind("drag", function(e){
-    		var position = $(this).offset();
-    		var start = position.left - 44;
-    		var width = $(this).width();
-    		//e.stopPropagation();
-    		//$(this).text("");
-     		$(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
-		} );
-        $(".clip").mouseover(function () {
-        	//$(this).css('opacity', '1');
-        });
-        $(".clip").mouseout(function () {
-        	$(this).css('opacity', '.7');
+ 
+                /* X axis only */
+                $("#drag-x div[id^='drag']").draggable({
+                        containment: "#drag-x",
+                        stack: ".drag",
+                        axis: "x",
+                        grid: [1,1],  
+                        snap: true,
+                        snapTolerance: 5  
+                });
+         
+                /* make draggable div always on top */
+                $("div[id^='drag']").mousedown(function () {
+                        $("div[id^='drag']").each(function () {
+                                var seq = $(this).attr("id").replace("drag", "");
+                                $(this).css('z-index', seq);
+                        });
+                });
+                $(".clip").resizable({
+                    handles: 'e, w', 
+                    minWidth: 15, //maxwidth will be determined by video clip!
+                    minHeight: 70,
+                    containment: "#drag-x"
+                }); 
+                $(".clip").resize(function(e){
+                    var position = $(this).offset();
+                    var start = position.left - 14; // TODO
+                    var width = $(this).width();
+                    //e.stopPropagation();
+                    //$(this).text("");
+                    $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
+                } );
+                $(".clip").bind("drag", function(e){
+                    var position = $(this).offset();
+                    var start = position.left - 14; // TODO
+                    var width = $(this).width();
+                    //e.stopPropagation();
+                    //$(this).text("");
+                    $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
+                } );
+                $(".clip").mouseover(function () {
+                    //$(this).css('opacity', '1');
+                });
+                $(".clip").mouseout(function () {
+                    $(this).css('opacity', '.7');
+                });
+            },
+            error: function(XMLHTTPRequest, textStatus, error) {
+                console.log(XMLHTTPRequest+" "+error);
+            }
         });
         /*$( ".slider-range" ).slider({
 			range: true,
