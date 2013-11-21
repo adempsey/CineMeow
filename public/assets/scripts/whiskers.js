@@ -186,7 +186,7 @@ $(function () {
 
     /* basic */
 
-    var scalingFactor = 5;
+    var scalingFactor = 10;
     $.ajax({
     	type: "GET",
     	url: "http://cinemeow.herokuapp.com/project?id=528a6b61e8f3c650ef000001",
@@ -238,16 +238,16 @@ $(function () {
             }); 
             $(".clip").resize(function(e){
                 var position = $(this).offset();
-                var start = position.left - $("#drag-x").position.left; // TODO
-                var width = $(this).width();
+                var start = (position.left - $("#drag-x").position.left) ; // TODO
+                var width = $(this).width() / scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
                 $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
             } );
             $(".clip").bind("drag", function(e){
-                var position = $(this).offset();
-                var start = position.left - 14; // TODO
-                var width = $(this).width();
+              var position = $(this).offset();
+                var start = (position.left - $("#drag-x").position.left); // TODO
+                var width = $(this).width() / scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
                 $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
