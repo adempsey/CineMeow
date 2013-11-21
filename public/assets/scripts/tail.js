@@ -72,7 +72,7 @@ function getProjectFromServer (){
 	        url: "http://http://cinemeow.herokuapp.com/project",
 	        //data: "id=" + $('#email').val() + "&password=" + $('#password').val() +
 	        //                "&password_confirm=" + $('#password_confirm').val(),
-	        data: "id=" + id;
+	        data: "id=" + id,
 	        success: function (msg) {
 	                console.log("Success " + msg);
 	        },
