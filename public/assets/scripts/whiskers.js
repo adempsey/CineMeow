@@ -183,3 +183,70 @@ function requestPlay(){
 		}
 	});
 }
+
+// test draggies
+$(function () {
+        /* basic */
+        $("#dragbasic div[id^='drag']").draggable({
+                containment: "#dragbasic",
+                stack: ".drag"
+        });
+ 
+        /* X axis only */
+        $("#drag-x div[id^='drag']").draggable({
+                containment: "#drag-x",
+                stack: ".drag",
+                axis: "x",
+                grid: [1,1],  
+                snap: true,
+                snapTolerance: 5  
+        });
+ 
+        /* make draggable div always on top */
+        $("div[id^='drag']").mousedown(function () {
+                $("div[id^='drag']").each(function () {
+                        var seq = $(this).attr("id").replace("drag", "");
+                        $(this).css('z-index', seq);
+                });
+        });
+        $(".clip").resizable({
+       		handles: 'e, w', 
+       		minWidth: 15, //maxwidth will be determined by video clip!
+       		minHeight: 70,
+       		containment: "#drag-x"
+    	}); 
+    	$(".clip").resize(function(e){
+    		var position = $(this).offset();
+    		var start = position.left - 44;
+    		var width = $(this).width();
+    		//e.stopPropagation();
+    		//$(this).text("");
+     		$(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
+		} );
+		$(".clip").bind("drag", function(e){
+    		var position = $(this).offset();
+    		var start = position.left - 44;
+    		var width = $(this).width();
+    		//e.stopPropagation();
+    		//$(this).text("");
+     		$(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
+		} );
+        $(".clip").mouseover(function () {
+        	//$(this).css('opacity', '1');
+        });
+        $(".clip").mouseout(function () {
+        	$(this).css('opacity', '.7');
+        });
+        /*$( ".slider-range" ).slider({
+			range: true,
+			min: 0,
+			max: 500,
+			values: [ 75, 300 ],
+			slide: function( event, ui ) {
+				$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+			}
+		});
+		$( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+			" - $" + $( "#slider-range" ).slider( "values", 1 ) );
+		*/
+		});
