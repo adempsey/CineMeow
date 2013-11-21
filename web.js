@@ -26,6 +26,79 @@ app.get('/', function(request, response) {
 	response.render('index');
 });
 
+// /* add clip to project's timeline */
+// app.post('/newclip', function(req, res) {
+// 	var ObjectID = mongo.ObjectID;
+// 	var id = new ObjectID(req.body["id"]);
+// 	db.collection("projects", function(err, collection) {
+// 		collection.findOne({ "_id": id }, function(err, results) {
+// 			if (err || !results) {
+// 				console.log(err);
+// 				res.send(400);
+// 			} else {
+// 				var clipStats = {
+// 					"name": req.body["name"],
+// 					"start_time": req.body["start_time"],
+// 					"end_time": req.body["end_time"],
+// 					"source": req.body["source"]
+// 				}
+// 				results.clips.push(clipStats);
+// 				collection.update({"_id": id}, {$set: {"clips": results.clips}}, function (err) {
+// 					if (err) {
+// 						res.send(400);
+// 					}
+// 				});
+// 				res.send(200);
+// 			}
+// 		});
+// 	});
+// });
+
+// /* edit a clip's start and end points */
+// app.post('/editclip', function(req, res) {
+// 	var ObjectID = mongo.ObjectID;
+// 	var id = new ObjectID(req.body["id"]);
+// 	db.collection("projects", function(err, collection) {
+// 		collection.findOne({"_id": id }, function(err, results) {
+// 			if (err || !results) {
+// 				console.log(err);
+// 				res.send(400);
+// 			} else {
+// 				var clip = results.clips.indexOf(req.bo)
+// 				for (var i in results.clips) { //this is kinda dumb haha we should fix it later
+// 					if (results.clips[i].name == req.body["name"]) {
+// 						results.clips[i].start_time = req.body["start_time"];
+// 						results.clips[i].end_time = req.body["end_time"];
+// 						break;
+// 					}
+// 				}
+// 				collection.update({"_id": id}, {$set: {"clips": results.clips}}, function (err) {
+// 					if (err) {
+// 						res.send(400);
+// 					}
+// 				});
+// 				res.send(200);
+// 			}
+// 		});
+// 	});
+// });
+
+/* returns project data for a given project id */
+app.get('/project', function(req, res) {
+	var ObjectID = mongo.ObjectID;
+	var id = new ObjectID(req.query.id);
+	db.collection("projects", function(err, collection) {
+		collection.findOne({"_id": id}, function(err, results) {
+			if (err || !results) {
+				console.log(err+" ** "+results);
+				res.send(400);
+			} else {
+				res.send(results);
+			}
+		});
+	});
+});
+
 /* generates new project skeleton */
 app.post('/newproject', function(req, res) {
 	db.collection("projects", function(err, collection) {
@@ -44,75 +117,23 @@ app.post('/newproject', function(req, res) {
 	});
 });
 
-/* add clip to project's timeline */
-app.post('/newclip', function(req, res) {
+app.post('/editproject', function(req, res) {
 	var ObjectID = mongo.ObjectID;
 	var id = new ObjectID(req.body["id"]);
-	db.collection("projects", function(err, collection) {
-		collection.findOne({ "_id": id }, function(err, results) {
-			if (err || !results) {
-				console.log(err);
-				res.send(400);
-			} else {
-				var clipStats = {
-					"name": req.body["name"],
-					"start_time": req.body["start_time"],
-					"end_time": req.body["end_time"],
-					"source": req.body["source"]
-				}
-				results.clips.push(clipStats);
-				collection.update({"_id": id}, {$set: {"clips": results.clips}}, function (err) {
-					if (err) {
-						res.send(400);
-					}
-				});
-				res.send(200);
-			}
-		});
-	});
-});
-
-/* edit a clip's start and end points */
-app.post('/editclip', function(req, res) {
-	var ObjectID = mongo.ObjectID;
-	var id = new ObjectID(req.body["id"]);
-	db.collection("projects", function(err, collection) {
-		collection.findOne({"_id": id }, function(err, results) {
-			if (err || !results) {
-				console.log(err);
-				res.send(400);
-			} else {
-				var clip = results.clips.indexOf(req.bo)
-				for (var i in results.clips) { //this is kinda dumb haha we should fix it later
-					if (results.clips[i].name == req.body["name"]) {
-						results.clips[i].start_time = req.body["start_time"];
-						results.clips[i].end_time = req.body["end_time"];
-						break;
-					}
-				}
-				collection.update({"_id": id}, {$set: {"clips": results.clips}}, function (err) {
-					if (err) {
-						res.send(400);
-					}
-				});
-				res.send(200);
-			}
-		});
-	});
-});
-
-/* returns project data for a given project id */
-app.get('/project', function(req, res) {
-	var ObjectID = mongo.ObjectID;
-	var id = new ObjectID(req.query.id);
-	console.log(id);
+	var data = JSON.parse(req.body['data']);
 	db.collection("projects", function(err, collection) {
 		collection.findOne({"_id": id}, function(err, results) {
 			if (err || !results) {
-				console.log(err+" ** "+results);
+				console.log(err);
 				res.send(400);
 			} else {
-				res.send(results);
+				console.log(data);
+				collection.update({"_id": id}, data, function(err) {
+					if (err) {
+						res.send(400);
+					}
+				});
+				res.send(200);
 			}
 		});
 	});
