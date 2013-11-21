@@ -59,31 +59,6 @@ function init() {
 	$("video").on('loadedmetadata', requestPlay);
 }
 
-$(document).ready(function() {
-	init();
-});
-
-function cutClip(clip_id) {
-	$("video").get(0).pause();
-	console.log("cut");
-	console.log(clip_id);
-
-	if(clip_id == 1) {
-		starttime = $("#start").val();
-		endtime = $("#end").val();
-
-		console.log("start" + starttime);
-		console.log("end" + endtime);
-	}
-	if(clip_id == 2) {
-		starttime2 = $("#start2").val();
-		endtime2 = $("#end2").val();
-
-		console.log("start2" + starttime2);
-		console.log("end2" + endtime2);
-	}
-}
-
 function getClipsJSON (){
 	return clips_data_JSON;
 }
@@ -130,7 +105,6 @@ function requestPlay(){
 		endtime = $("#end" + i).val();
 
 		if(this.currentTime != starttime && dirty == 0) {
-				console.log(i);
 			this.currentTime = starttime;
 			dirty = 1;
 		}
@@ -140,6 +114,10 @@ function requestPlay(){
 			i++;
 		}
 	});
+}
+
+function requestPause() {
+	$("video").get(0).pause();
 }
 
 $(function () {
@@ -152,27 +130,23 @@ $(function () {
     	url: "http://cinemeow.herokuapp.com/project?id=528a6b61e8f3c650ef000001",
 	    success: function(data) {
             project = data;
-            console.log(project);
             $('#title').text(project.name);
             $('#created_at').text("Created on "+project.created_at);  
             for (var i in project.clips) {
-            	console.log("start time: " + project.clips[i]["start_time"]); 
                 var clip=project.clips[i];
                 var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
                 $("#drag-x").append('<div id="drag'+i+'" class="drag clip" style="background-color:'+color+'">'+clip.name+'</div>');
+                i++;
+                $("#log").append('Clip ' + i);
+                i--;
                 $("#log").append('<input type="text" id="start'+i+'" value="'+project.clips[i]["start_time"]+'">');
                 $("#log").append('<input type="text" id="end'+i+'" value="'+project.clips[i]["end_time"]+'"><br/>');
             }
             for (var i in project.clips) {
-   				$("#drag"+i).offset({left: project.clips[i]["start_time"]*scalingFactor});
+   				$("#drag"+i).offset({left: project.clips[i]["start_time"]*scalingFactor + $("#drag-x").offset().left} );
                 $("#drag"+i).width((project.clips[i]["end_time"]-project.clips[i]["start_time"])*scalingFactor);
                 console.log("width " + (project.clips[i]["end_time"]-project.clips[i]["start_time"])*scalingFactor);
             }
-
-            $("#dragbasic div[id^='drag']").draggable({
-                containment: "#dragbasic",
-                stack: ".drag"
-            });
 
             /* X axis only */
             $("#drag-x div[id^='drag']").draggable({
@@ -181,7 +155,12 @@ $(function () {
                     axis: "x",
                     grid: [1,1],  
                     snap: true,
-                    snapTolerance: 5  
+                    snapTolerance: 5, 
+                    stop: function() {
+                        console.log("saving clips!");
+                        saveClips();
+                    }
+                    //TODO: MOVE DRAG FUNCTION IN HERE
             });
      
             /* make draggable div always on top */
@@ -200,25 +179,28 @@ $(function () {
             $(".clip").resize(function(e){
                 var position = $(this).offset();
                 var offset = $("#drag-x").offset().left;
-                var start = (position.left - offset) / scalingFactor - 6; 
+                var start = (position.left - offset) / scalingFactor - .6; 
                 var width = $(this).width() / scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
                 $("#info").text("start:" + start + " end: " + (start+width) + " length: "+ width);
-                var idnum = $(this).id;//$(this).attr('id');//.substring(5);//"drag"
-                console.log("IDNUM " + idnum);
                 var idnum2 = $(this).attr('id');//.substring(5);//"drag"
-                console.log("IDNUM " + idnum2);
-                //$("#start" + i).val();
+                var idnum = idnum2.substring(4);//"drag"
+                $("#start" + idnum).val(start);
+                $("#end" + idnum).val((start+width));
             } );
             $(".clip").bind("drag", function(e){
-                var position = $(this).offset();
+                 var position = $(this).offset();
                 var offset = $("#drag-x").offset().left;
-                var start = (position.left - offset) /scalingFactor - 6;
-                var width = $(this).width() /scalingFactor;
+                var start = (position.left - offset) / scalingFactor -.6; 
+                var width = $(this).width() / scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
                 $("#info").text("start:" + start + " end: " + (start+width) + " length: "+ width);
+                var idnum2 = $(this).attr('id');//.substring(5);//"drag"
+                var idnum = idnum2.substring(4);//"drag"
+                $("#start" + idnum).val(start);
+                $("#end" + idnum).val((start+width));
                 /*
                 var position = $(this).offset();
                 var start = position.left - 14; // TODO
@@ -234,6 +216,8 @@ $(function () {
             $(".clip").mouseout(function () {
                 $(this).css('opacity', '.7');
             });
+
+            init();
         },
         error: function(XMLHTTPRequest, textStatus, error) {
             console.log(XMLHTTPRequest+" "+error);
@@ -254,7 +238,6 @@ $(function () {
 	});
 
 function saveClips() {
-	console.log(project);
 	var projectJSON;
 	for(var i = 0; i < project.clips.length; i++) {
 		project.clips[i]["start_time"] = $("#start" + i).val();
