@@ -242,6 +242,7 @@ $(function () {
 	});
 
 function saveClips() {
+	$("#change_message").text("Saving changes...");
 	var projectJSON;
 	for(var i = 0; i < project.clips.length; i++) {
 		project.clips[i]["start_time"] = $("#start" + i).val();
@@ -258,9 +259,12 @@ function saveClips() {
 		data: "id="+project._id+"&data="+projectJSON,
 		success: function(data) {
 			console.log("successfully updated "+data);
+			$("#change_message").text("Changes saved automatically");
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
 			console.log(errorThrown);
+			$("#change_message").css("color: #FF0000;");
+			$("#change_message").text("Warning: Error saving changes");
 		}
 	});
 }
