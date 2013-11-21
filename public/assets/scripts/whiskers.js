@@ -200,13 +200,11 @@ $(function () {
             $(".clip").resize(function(e){
                 var position = $(this).offset();
                 var offset = $("#drag-x").offset().left;
-                var start = (position.left - offset) / scalingFactor - 6; 
+                var start = (position.left - offset) / scalingFactor - 0; 
                 var width = $(this).width() / scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
                 $("#info").text("start:" + start + " end: " + (start+width) + " length: "+ width);
-                var idnum = $(this).id;//$(this).attr('id');//.substring(5);//"drag"
-                console.log("IDNUM " + idnum);
                 var idnum2 = $(this).attr('id');//.substring(5);//"drag"
                 console.log("IDNUM " + idnum2);
                 //$("#start" + i).val();
@@ -214,7 +212,7 @@ $(function () {
             $(".clip").bind("drag", function(e){
                 var position = $(this).offset();
                 var offset = $("#drag-x").offset().left;
-                var start = (position.left - offset) /scalingFactor - 6;
+                var start = (position.left - offset) /scalingFactor - 0;
                 var width = $(this).width() /scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
