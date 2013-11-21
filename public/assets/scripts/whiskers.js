@@ -238,7 +238,7 @@ $(function () {
             }); 
             $(".clip").resize(function(e){
                 var position = $(this).offset();
-                var start = (position.left - $("#drag-x").position.left)/scalingFactor; // TODO
+                var start = (position.left - $("#drag-x").position.left) ; // TODO
                 var width = $(this).width() / scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
@@ -246,7 +246,7 @@ $(function () {
             } );
             $(".clip").bind("drag", function(e){
               var position = $(this).offset();
-                var start = (position.left - $("#drag-x").position.left)/scalingFactor; // TODO
+                var start = (position.left - $("#drag-x").position.left); // TODO
                 var width = $(this).width() / scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
