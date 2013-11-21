@@ -117,6 +117,10 @@ function requestPlay(){
 	});
 }
 
+function requestPause() {
+	$("video").get(0).pause();
+}
+
 $(function () {
 
     /* basic */

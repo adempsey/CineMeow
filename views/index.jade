@@ -3,11 +3,12 @@ block content
 
 	h2(id="title")
 
-	video(width='500', height='300', controls='controls')
+	video(width='500', height='280', controls='controls')
 		source(src='http://media.cinemeow.s3.amazonaws.com/eyebrows.mp4', type='video/mp4')
 			| Your browser does not support the video tag.
 	p
 		button(type="button", onclick="requestPlay();") Play!
+		button(type="button", onclick="requestPause();") Pause!
 		button(type="button", onclick="saveClips();") Save!
 	div
 		div(id="drag-x")
