@@ -149,15 +149,6 @@ $(function () {
                 console.log("width " + (project.clips[i]["end_time"]-project.clips[i]["start_time"])*scalingFactor);
             }
 
-            $("#dragbasic div[id^='drag']").draggable({
-                containment: "#dragbasic",
-                stack: ".drag", 
-                 stop: function() {
-                    console.log("saving clips!");
-                    saveClips();
-                }
-            });
-
             /* X axis only */
             $("#drag-x div[id^='drag']").draggable({
                     containment: "#drag-x",
@@ -165,7 +156,11 @@ $(function () {
                     axis: "x",
                     grid: [1,1],  
                     snap: true,
-                    snapTolerance: 5  
+                    snapTolerance: 5, 
+                    stop: function() {
+                        console.log("saving clips!");
+                        saveClips();
+                    }
             });
      
             /* make draggable div always on top */
