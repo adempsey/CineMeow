@@ -76,13 +76,6 @@ function getProjectFromServer (){
 	        },
 	        error: function(XMLHttpRequest, textStatus, errorThrown) {
 	        	 console.log("failure " + textStatus + " : "+ errorThrown);
-	               /* if ($('#email').val().length == 0 || $('#password').val().length == 0
-	                        || $('#password_confirm').val().length == 0) {
-	                        $('#form_warning').text("Please fill in all fields");
-	                } else {
-	                        $('#form_warning').text("There are some errors in the form. Please see red text");
-	                }
-	                $('#form_warning').fadeIn('fast');*/
 	        }
 	});
 }

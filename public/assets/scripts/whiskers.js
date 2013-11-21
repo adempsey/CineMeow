@@ -232,7 +232,7 @@ $(function () {
             }); 
             $(".clip").resize(function(e){
                 var position = $(this).offset();
-                var start = position.left - 14; // TODO
+                var start = position.left - $("#drag-x").position.left; // TODO
                 var width = $(this).width();
                 //e.stopPropagation();
                 //$(this).text("");
