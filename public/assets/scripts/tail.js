@@ -77,6 +77,7 @@ function getProjectFromServer (){
 	                console.log("Success " + msg);
 	        },
 	        error: function(XMLHttpRequest, textStatus, errorThrown) {
+	        	 console.log("failure " + textStatus + " : "+ errorThrown);
 	               /* if ($('#email').val().length == 0 || $('#password').val().length == 0
 	                        || $('#password_confirm').val().length == 0) {
 	                        $('#form_warning').text("Please fill in all fields");
