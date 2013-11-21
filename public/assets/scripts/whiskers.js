@@ -198,6 +198,8 @@ $(function () {
                 var clip=project.clips[i];
                 var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
                 $("#drag-x").append('<div id="drag'+i+'" class="drag clip" style="background-color:'+color+'">'+clip.name+'</div>');
+                $("#drag"+i).offset(left:project.clips[i]["start_time"]);
+                $("#drag"+i).width(project.clips[i]["end_time"]-left:project.clips[i]["start_time"]);
                 $("#log").append('<input type="text" id="start'+i+'" value="'+project.clips[i]["start_time"]+'">');
                 $("#log").append('<input type="text" id="end'+i+'" value="'+project.clips[i]["end_time"]+'"><br/>');
             }
