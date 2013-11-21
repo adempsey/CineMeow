@@ -205,7 +205,7 @@ $(function () {
                 //e.stopPropagation();
                 //$(this).text("");
                 $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
-                var idnum = $(this).attr('id');//.substring(5);//"drag"
+                var idnum = $(this).id;//$(this).attr('id');//.substring(5);//"drag"
                 console.log("IDNUM " + idnum);
                 //$("#start" + i).val();
             } );
