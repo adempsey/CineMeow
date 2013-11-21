@@ -238,7 +238,7 @@ $(function () {
             }); 
             $(".clip").resize(function(e){
                 var position = $(this).offset();
-                var offset = $("#drag-x").position.left;
+                var offset = $("#drag-x").offset().left;
                 var start = position.left - offset ; // TODO
                 var width = $(this).width() / scalingFactor;
                 //e.stopPropagation();
@@ -248,7 +248,7 @@ $(function () {
             $(".clip").bind("drag", function(e){
               var position = $(this).offset();
                 var start = position.left; // TODO
-                var width = $(this).width();
+                var width = $(this).width() /scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
                 $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
