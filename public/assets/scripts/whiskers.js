@@ -245,9 +245,9 @@ $(function () {
                 $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
             } );
             $(".clip").bind("drag", function(e){
-                var position = $(this).offset();
-                var start = position.left - 14; // TODO
-                var width = $(this).width();
+              var position = $(this).offset();
+                var start = 1.0 * (position.left - $("#drag-x").position.left)/scalingFactor; // TODO
+                var width = 1.0 * $(this).width() / scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
                 $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
