@@ -1,23 +1,3 @@
-/*
-//Temp Code for prototype
-var current_clip;
-current_clip.start_time = 10;
-current_clip.end_time = 15;
-
-//Front-end code
-var clips_data_JSON;
-var clips_data = [];
-var current_project_id = "someID number";
-
-//Clip Data Structure
-var clip_ex = new Object();
-clip_ex.start_time = 15; //in ms
-clip_ex.end_time = 120;  //in ms
-clip_ex.source_video_id = "someID";
-clip_ex.clip_id = "someIDAs well";
-ciip_ex.filters = " ";//{};// array of filter info, will get into later
-*/
-
 //Adds video at correct location, and generates an ID for it?
 function addClipToData(clip){
 	//Insert clip in chronological index\
@@ -81,35 +61,6 @@ function init() {
 
 $(document).ready(function() {
 	init();
-
-	// initialize slider
-	$("#slider").slider({
-        min: 0,
-        max: 39, // this should be currentclip.totalTime
-        step: 1,
-        values: [10, 15],
-        slide: function(event, ui) {
-            for (var i = 0; i < ui.values.length; ++i) {
-                $("input.sliderValue[data-index=" + i + "]").val(ui.values[i]);
-            }
-        }
-    });
-
-	$("#slider2").slider({
-        min: 0,
-        max: 39, // this should be currentclip.totalTime
-        step: 1,
-        values: [20, 24],
-        slide: function(event, ui) {
-            $("input.sliderValue[data-index=2]").val(ui.values[0]);
-            $("input.sliderValue[data-index=3]").val(ui.values[1]);
-        }
-    });
-
-    $("input.sliderValue").change(function() {
-        var $this = $(this);
-        $("#slider").slider("values", $this.data("index"), $this.val());
-    });
 });
 
 function cutClip(clip_id) {
@@ -164,20 +115,29 @@ function clipWasModified(clip){
 //Request Play 
 function requestPlay(){
 	var dirty = 0;
+	var i = 0;
 	$("video").get(0).play();
+	var starttime, endtime;
 
 	$("video").on('timeupdate', function() {
+		if(i == project.clips.length) {
+			this.pause();
+			i = 0;
+			return false;
+		}
+
+		starttime = $("#start" + i).val();
+		endtime = $("#end" + i).val();
+
 		if(this.currentTime != starttime && dirty == 0) {
+				console.log(i);
 			this.currentTime = starttime;
 			dirty = 1;
 		}
-		if(this.currentTime > endtime && dirty == 1) {
-			this.currentTime = starttime2;
-			this.play();
-			dirty = 2;
-		}
-		if(this.currentTime > endtime2 && dirty == 2) {
-			this.pause();
+
+		if(this.currentTime > endtime && dirty == 1) {;
+			dirty = 0;
+			i++;
 		}
 	});
 }
@@ -192,6 +152,7 @@ $(function () {
     	url: "http://cinemeow.herokuapp.com/project?id=528a6b61e8f3c650ef000001",
 	    success: function(data) {
             project = data;
+            console.log(project);
             $('#title').text(project.name);
             $('#created_at').text("Created on "+project.created_at);  
             for (var i in project.clips) {
@@ -286,3 +247,20 @@ $(function () {
 		" - $" + $( "#slider-range" ).slider( "values", 1 ) );
 	*/
 	});
+
+function saveClips() {
+	console.log(project);
+	var projectJSON;
+	for(var i = 0; i < project.clips.length; i++) {
+		project.clips[i]["start_time"] = $("#start" + i).val();
+		project.clips[i]["end_time"] = $("#end" + i).val();
+	}
+
+	projectJSON = JSON.stringify(project);
+	console.log(projectJSON);
+
+	$.post( "http://cinemeow.herokuapp.com/editproject", projectJSON)
+		.done(function( data ) {
+			alert( "Data Loaded: " + data );
+		});
+}
