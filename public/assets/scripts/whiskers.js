@@ -143,7 +143,7 @@ $(function () {
                 $("#log").append('<input type="text" id="end'+i+'" value="'+project.clips[i]["end_time"]+'"><br/>');
             }
             for (var i in project.clips) {
-   				$("#drag"+i).offset({left: project.clips[i]["start_time"]*scalingFactor});
+   				$("#drag"+i).offset({left: project.clips[i]["start_time"]*scalingFactor + $("#drag-x").offset().left} );
                 $("#drag"+i).width((project.clips[i]["end_time"]-project.clips[i]["start_time"])*scalingFactor);
                 console.log("width " + (project.clips[i]["end_time"]-project.clips[i]["start_time"])*scalingFactor);
             }
