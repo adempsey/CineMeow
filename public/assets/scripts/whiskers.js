@@ -186,7 +186,9 @@ $(function () {
                 //$(this).text("");
                 $("#info").text("start:" + start + " end: " + (start+width) + " length: "+ width);
                 var idnum2 = $(this).attr('id');//.substring(5);//"drag"
+                var subst = idnum2.substring(4);//"drag"
                 console.log("IDNUM " + idnum2);
+                 console.log("ID " + subst);
                 //$("#start" + i).val();
             } );
             $(".clip").bind("drag", function(e){
