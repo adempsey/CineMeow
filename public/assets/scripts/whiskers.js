@@ -193,23 +193,24 @@ $(function () {
             });
             $(".clip").resizable({
                 handles: 'e, w', 
-                minWidth: 15, //maxwidth will be determined by video clip!
+                minWidth: 10, //maxwidth will be determined by video clip!
                 minHeight: 70,
                 containment: "#drag-x"
             }); 
             $(".clip").resize(function(e){
                 var position = $(this).offset();
-                var offset = $("#drag-x").position.left;
-                var start = position.left - offset ; // TODO
+                var offset = $("#drag-x").offset().left;
+                var start = (position.left - offset) / scalingFactor - 6; 
                 var width = $(this).width() / scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
                 $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
             } );
             $(".clip").bind("drag", function(e){
-              var position = $(this).offset();
-                var start = position.left; // TODO
-                var width = $(this).width();
+                var position = $(this).offset();
+                var offset = $("#drag-x").offset().left;
+                var start = (position.left - offset) /scalingFactor - 6;
+                var width = $(this).width() /scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
                 $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
