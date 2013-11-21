@@ -81,35 +81,6 @@ function init() {
 
 $(document).ready(function() {
 	init();
-
-	// initialize slider
-	$("#slider").slider({
-        min: 0,
-        max: 39, // this should be currentclip.totalTime
-        step: 1,
-        values: [10, 15],
-        slide: function(event, ui) {
-            for (var i = 0; i < ui.values.length; ++i) {
-                $("input.sliderValue[data-index=" + i + "]").val(ui.values[i]);
-            }
-        }
-    });
-
-	$("#slider2").slider({
-        min: 0,
-        max: 39, // this should be currentclip.totalTime
-        step: 1,
-        values: [20, 24],
-        slide: function(event, ui) {
-            $("input.sliderValue[data-index=2]").val(ui.values[0]);
-            $("input.sliderValue[data-index=3]").val(ui.values[1]);
-        }
-    });
-
-    $("input.sliderValue").change(function() {
-        var $this = $(this);
-        $("#slider").slider("values", $this.data("index"), $this.val());
-    });
 });
 
 function cutClip(clip_id) {
@@ -164,10 +135,32 @@ function clipWasModified(clip){
 //Request Play 
 function requestPlay(){
 	var dirty = 0;
+	var i = 0;
 	$("video").get(0).play();
+	var starttime, endtime;
 
 	$("video").on('timeupdate', function() {
+		if(i == project.clips.length) {
+			this.pause();
+			return false;
+		}
+
+		starttime = project.clips[i]["start_time"];
+		endtime = project.clips[i]["end_time"];
+
 		if(this.currentTime != starttime && dirty == 0) {
+			this.currentTime = starttime;
+			dirty = 1;
+		}
+
+		if(this.currentTime > endtime && dirty == 1) {
+			dirty = 0;
+			i++;
+		}
+	});
+
+	$("video").on('timeupdate', function() {
+		/*if(this.currentTime != starttime && dirty == 0) {
 			this.currentTime = starttime;
 			dirty = 1;
 		}
@@ -178,7 +171,7 @@ function requestPlay(){
 		}
 		if(this.currentTime > endtime2 && dirty == 2) {
 			this.pause();
-		}
+		}*/
 	});
 }
 
