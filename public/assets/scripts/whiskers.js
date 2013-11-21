@@ -257,9 +257,17 @@ function saveClips() {
 
 	projectJSON = JSON.stringify(project);
 	console.log(projectJSON);
+	console.log(project);
 
-	$.post( "http://cinemeow.herokuapp.com/editproject", projectJSON)
-		.done(function( data ) {
-			alert( "Data Loaded: " + data );
-		});
+	$.ajax({
+		type: "POST",
+		url: "http://cinemeow.herokuapp.com/editproject",
+		data: "id="+project._id+"&data="+projectJSON,
+		success: function(data) {
+			console.log("successfully updated "+data);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			console.log(errorThrown);
+		}
+	});
 }
