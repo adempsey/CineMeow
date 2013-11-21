@@ -1,8 +1,7 @@
 extend layout
 block content
 
-	p
-		b Project Eyebrow
+	h2(id="title")
 
 	video(width='500', height='300', controls='controls')
 		source(src='http://media.cinemeow.s3.amazonaws.com/eyebrows.mp4', type='video/mp4')
@@ -13,33 +12,11 @@ block content
 
 	div
 		div(id="drag-x")
-			div(id="drag2", class="drag clip", style="background-color:orange") Clip 1
-			div(id="drag3", class="drag clip", style="background-color:lightblue") Clip 2  
 	div(id="info")
 
-	p
-		b Clip 1
-	form
-		div(id="slider", style="width: 500px; margin-left: auto; margin-right: auto; margin-top: 0px;")
-		div
-			input(type="text", id="start" class="sliderValue", data-index="0", value="10")
-			input(type="text", id="end", class="sliderValue", data-index="1", value="15")
-
-	button(type="button", onclick="cutClip('1');") Cut!
-
-	p
-		b Clip 2
-	form
-		div(id="slider2", style="width: 500px; margin-left: auto; margin-right: auto; margin-top: 0px;")
-		div
-			input(type="text", id="start2", class="sliderValue", data-index="2", value="20")
-			input(type="text", id="end2", class="sliderValue", data-index="3", value="24")		
-
-	button(type="button", onclick="cutClip('2');") Cut!
+	div(id="log")
 
 	script(src='/assets/scripts/whiskers.js')
 	script(src='/assets/scripts/tail.js')
-	script(type='text/javascript')
-		test()
 
 
