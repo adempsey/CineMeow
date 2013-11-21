@@ -186,6 +186,7 @@ $(function () {
 
     /* basic */
 
+    var scalingFactor = 5;
     $.ajax({
     	type: "GET",
     	url: "http://cinemeow.herokuapp.com/project?id=528a6b61e8f3c650ef000001",
@@ -194,7 +195,7 @@ $(function () {
             $('#title').text(project.name);
             $('#created_at').text("Created on "+project.created_at);  
             for (var i in project.clips) {
-            	            console.log(project.clips[i]["start_time"]); 
+            	console.log("start time: " + project.clips[i]["start_time"]); 
                 var clip=project.clips[i];
                 var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
                 $("#drag-x").append('<div id="drag'+i+'" class="drag clip" style="background-color:'+color+'">'+clip.name+'</div>');
@@ -202,9 +203,9 @@ $(function () {
                 $("#log").append('<input type="text" id="end'+i+'" value="'+project.clips[i]["end_time"]+'"><br/>');
             }
             for (var i in project.clips) {
-   				$("#drag"+i).offset({left: project.clips[i]["start_time"]});
-                $("#drag"+i).width(project.clips[i]["end_time"]-project.clips[i]["start_time"]);
-                console.log("width " + (project.clips[i]["end_time"]-project.clips[i]["start_time"]));
+   				$("#drag"+i).offset({left: project.clips[i]["start_time"]*scalingFactor});
+                $("#drag"+i).width((project.clips[i]["end_time"]-project.clips[i]["start_time"])*scalingFactor);
+                console.log("width " + (project.clips[i]["end_time"]-project.clips[i]["start_time"])*scalingFactor);
             }
 
             $("#dragbasic div[id^='drag']").draggable({
