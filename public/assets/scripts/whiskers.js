@@ -204,9 +204,11 @@ $(function () {
                 var width = $(this).width() / scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
-                $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
+                $("#info").text("start:" + start + " end: " + (start+width) + " length: "+ width);
                 var idnum = $(this).id;//$(this).attr('id');//.substring(5);//"drag"
                 console.log("IDNUM " + idnum);
+                var idnum2 = $(this).attr('id');//.substring(5);//"drag"
+                console.log("IDNUM " + idnum2);
                 //$("#start" + i).val();
             } );
             $(".clip").bind("drag", function(e){
@@ -216,7 +218,7 @@ $(function () {
                 var width = $(this).width() /scalingFactor;
                 //e.stopPropagation();
                 //$(this).text("");
-                $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
+                $("#info").text("start:" + start + " end: " + (start+width) + " length: "+ width);
                 /*
                 var position = $(this).offset();
                 var start = position.left - 14; // TODO
