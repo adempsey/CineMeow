@@ -173,12 +173,10 @@ function requestPlay(){
 		}
 		if(this.currentTime > endtime && dirty == 1) {
 			this.currentTime = starttime2;
-			console.log("play 2nd clip");
 			this.play();
 			dirty = 2;
 		}
 		if(this.currentTime > endtime2 && dirty == 2) {
-			console.log("pause 2nd clip");
 			this.pause();
 		}
 	});
@@ -201,6 +199,7 @@ $(function () {
                 var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
                 $("#drag-x").append('<div id="drag'+i+'" class="drag clip" style="background-color:'+color+'">'+clip.name+'</div>');
                 $("#log").append('<input type="text" id="start'+i+'" value="'+project.clips[i]["start_time"]+'">');
+                $("#log").append('<input type="text" id="end'+i+'" value="'+project.clips[i]["end_time"]+'"><br/>');
             }
 
             $("#dragbasic div[id^='drag']").draggable({
