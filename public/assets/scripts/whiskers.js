@@ -176,6 +176,10 @@ $(function () {
                 minHeight: 70,
                 containment: "#drag-x"
             }); 
+            for(var i in project.clips){
+                $("#drag"+i).resizable( "option", "maxWidth", 39*scalingFactor/*project.clips[i].*/ );
+            }
+
             $(".clip").resize(function(e){
                 var position = $(this).offset();
                 var offset = $("#drag-x").offset().left;

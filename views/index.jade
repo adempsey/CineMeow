@@ -6,15 +6,15 @@ block content
 	video(width='500', height='280')
 		source(src='http://media.cinemeow.s3.amazonaws.com/eyebrows.mp4', type='video/mp4')
 			| Your browser does not support the video tag.
-	p
-		button(type="button", onclick="requestPlay();") Play!
-		button(type="button", onclick="requestPause();") Pause!
-		button(type="button", onclick="saveClips();") Save!
-	div
+	div(style="width: 500px; text-align: center;")
+		button(type="button", onclick="requestPlay();") &#9654;
+		button(type="button", onclick="requestPause();") &#x25FC;
+		button(type="button", onclick="saveClips();") Save
+	div(style="margin-top: 10px;")
 		div(id="drag-x")
 	div(id="info", style="display: none;")
 
-	div(id="log", style="display: none;")
+	div(id="log", style="display: block;")
 
 	script(src='/assets/scripts/whiskers.js')
 	script(src='/assets/scripts/tail.js')
