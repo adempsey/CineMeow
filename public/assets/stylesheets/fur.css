@@ -52,12 +52,18 @@ body {
     padding-right: 5px;
 }
 
+<<<<<<< HEAD
 #main_container {
     position: relative;
 }
 
 #clipsviewer{
     display: inline-block;
+=======
+#videoplayer{
+    background-color: #E0F0FF;
+    width: 540px;
+>>>>>>> ae6a16dc43c31207158b2feae4d463b10857cb49
 }
 
 #videoplayer{
