@@ -162,8 +162,28 @@ $(function () {
                     stop: function() {
                         console.log("saving clips!");
                         saveClips();
+                    },
+                    drag: function(e){
+                        var position = $(this).offset();
+                        var offset = $("#drag-x").offset().left;
+                        var start = (position.left - offset) / scalingFactor -.6; 
+                        var width = $(this).width() / scalingFactor;
+                        //e.stopPropagation();
+                        //$(this).text("");
+                        $("#info").text("start:" + start + " end: " + (start+width) + " length: "+ width);
+                        var idnum2 = $(this).attr('id');//.substring(5);//"drag"
+                        var idnum = idnum2.substring(4);//"drag"
+                        $("#start" + idnum).val(start);
+                        $("#end" + idnum).val((start+width));
+                        /*
+                        var position = $(this).offset();
+                        var start = position.left - 14; // TODO
+                        var width = $(this).width();
+                        //e.stopPropagation();
+                        //$(this).text("");
+                        $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
+                        */
                     }
-                    //TODO: MOVE DRAG FUNCTION IN HERE
             });
      
             /* make draggable div always on top */
@@ -210,27 +230,6 @@ $(function () {
                     saveClips();
                 }               
             }
-            $(".clip").bind("drag", function(e){
-                 var position = $(this).offset();
-                var offset = $("#drag-x").offset().left;
-                var start = (position.left - offset) / scalingFactor -.6; 
-                var width = $(this).width() / scalingFactor;
-                //e.stopPropagation();
-                //$(this).text("");
-                $("#info").text("start:" + start + " end: " + (start+width) + " length: "+ width);
-                var idnum2 = $(this).attr('id');//.substring(5);//"drag"
-                var idnum = idnum2.substring(4);//"drag"
-                $("#start" + idnum).val(start);
-                $("#end" + idnum).val((start+width));
-                /*
-                var position = $(this).offset();
-                var start = position.left - 14; // TODO
-                var width = $(this).width();
-                //e.stopPropagation();
-                //$(this).text("");
-                $(info).text("start:" + start + " end: " + (start+width) + " length: "+ width);
-                */
-            } );
             $(".clip").mouseover(function () {
                 //$(this).css('opacity', '1');
             });
@@ -243,20 +242,8 @@ $(function () {
         error: function(XMLHTTPRequest, textStatus, error) {
             console.log(XMLHTTPRequest+" "+error);
         }
+        });
     });
-    /*$( ".slider-range" ).slider({
-		range: true,
-		min: 0,
-		max: 500,
-		values: [ 75, 300 ],
-		slide: function( event, ui ) {
-			$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-		}
-	});
-	$( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-		" - $" + $( "#slider-range" ).slider( "values", 1 ) );
-	*/
-	});
 
 function saveClips() {
 	$("#change_message").text("Saving changes...");
@@ -285,3 +272,67 @@ function saveClips() {
 		}
 	});
 }
+
+//Video Clips Menu
+
+$(function(){
+    /*for (var i in project.clips) {
+        var clip=project.clips[i];
+        var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
+        $("#drag-clipsviewer").append('<div id="dragclip'+i+'" class="drag clip" style="background-color:'+color+'">'+clip.name+'</div>');
+    }
+    for (var i in project.clips) {
+        $("#dragclip"+i).offset({left: project.clips[i]["start_time"]*scalingFactor + $("#drag-clipsviewer").offset().left} );
+        $("#dragclip"+i).width((project.clips[i]["end_time"]-project.clips[i]["start_time"])*scalingFactor);
+        console.log("width " + (project.clips[i]["end_time"]-project.clips[i]["start_time"])*scalingFactor);
+    }*/
+    var container_count = 2;
+    //HARDCODED:
+      $("#drag-clipsviewer").append('<div id="clipsource'+0+'"  style=" width: 530px, background-color: black"> </div>');
+      $("#drag-clipsviewer").append('<div id="clipsource'+1+'"  style=" width: 530px, background-color: black"> </div>');
+      $("#clipsource" +0).append('<div id="dragclone'+0+'"  class="drag_clone" style="background-color: white"> DRAGME</div>');
+      $("#clipsource" +1).append('<div id="dragclone'+1+'"  class="drag_clone" style=" background-color: white"> DRAGME</div>');
+      $("#clipsource" +0).append('<div id="clipcontainer'+0+'" class="clip_container" style="background-color: E0F0FF"> </div>');
+      $("#clipsource" +1).append('<div id="clipcontainer'+1+'" class="clip_container" style="background-color: E0F0FF"> </div>');
+      var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
+      $("#clipcontainer" +0).append('<div id="dragclip'+0+'" class="dragclip drag" style="background-color:'+color+'"> some clip </div>');
+      var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
+      $("#clipcontainer" +1).append('<div id="dragclip'+1+'" class="dragclip drag" style="background-color:'+color+'"> some other clip </div>');
+    /* X axis only */
+    for(var i = 0; i < container_count; i ++){
+        $("#clipcontainer"+i+" div[id^='dragclip']").draggable({
+                containment: "#drag-clipsviewer",
+                stack: ".dragclip",
+                axis: "x",
+                grid: [1,1],  
+                snap: true,
+                snapTolerance: 5, 
+                stop: function() {
+                    //console.log("saving clips!");
+                    //saveClips();
+                }
+                //,
+                //drag: function(e){
+                //}
+        });
+        $("#dragclip"+i).resizable({
+            handles: 'e, w', 
+            minWidth: 10, //maxwidth will be determined by video clip!
+            minHeight: 70,
+            maxWidth: 500//TODO GET CONTAINMENT WORKING DYNAMICALLY
+            //containment: "#drag-clipsviewer"//containment: "#clipcontainer"+i
+        }); 
+    }
+    
+    $(".dragclip").mouseover(function () {
+        //$(this).css('opacity', '1');
+    });
+    $(".dragclip").mouseout(function () {
+        $(this).css('opacity', '.7');
+    });
+
+     $( ".drag_clone" ).draggable({
+        helper: "clone",
+        revert: "invalid"
+    });
+});

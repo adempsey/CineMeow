@@ -22,6 +22,19 @@ body {
     opacity: .7;
     padding-top: 5px;
 }
+
+.drag_clone {
+    width: 100px;
+    /*height: 20px;*/
+    border: 2px solid black;
+    cursor: pointer;
+    border-radius:  8px;
+    float: left;
+    text-align: center;
+    font-size: 12px;
+    background-color: white;
+    margin: 5px;
+}
  
 #drag-x {
     width: 500px;
@@ -29,4 +42,20 @@ body {
     border: 1px solid gray;
     background-color: #E0F0FF;
     padding-right: 5px;
+}
+
+.clip_container {
+    width: 500px;
+    height: 75px;
+    border: 1px solid gray;
+    background-color: #E0F0FF;
+    padding-right: 5px;
+}
+
+#clipsviewer{
+    float:right;
+}
+#videoplayer{
+     background-color: #E0F0FF;
+    width: 540px;
 }
