@@ -52,10 +52,17 @@ body {
     padding-right: 5px;
 }
 
-#clipsviewer{
-    float:right;
+#main_container {
+    position: relative;
 }
+
+#clipsviewer{
+    display: inline-block;
+}
+
 #videoplayer{
-     background-color: #E0F0FF;
+    display: inline-block;
+    background-color: #E0F0FF;
     width: 540px;
 }
+
