@@ -24,16 +24,18 @@ body {
 }
 
 .drag_clone {
-    width: 100px;
-    /*height: 20px;*/
-    border: 2px solid black;
+    width: 30px;
+    max-width: 30px;
+    height: 70px;
+    border: 1px solid black;
     cursor: pointer;
-    border-radius:  8px;
+    border-top-left-radius:  8px;
+     border-bottom-left-radius:  8px;
     float: left;
     text-align: center;
     font-size: 12px;
-    background-color: white;
-    margin: 5px;
+    background-color: #aabbff;
+    margin: none;
 }
  
 #drag-x {
@@ -50,6 +52,8 @@ body {
     border: 1px solid gray;
     background-color: #E0F0FF;
     padding-right: 5px;
+    float: right;
+    margin-left: none;
 }
 
 #main_container {
@@ -68,5 +72,7 @@ body {
     display: inline-block;
     background-color: #E0F0FF;
     width: 540px;
+}
+.clip_source{
 }
 
