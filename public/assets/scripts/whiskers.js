@@ -321,7 +321,7 @@ $(function(){
             minHeight: 70,
             maxWidth: 500//TODO GET CONTAINMENT WORKING DYNAMICALLY
             //containment: "#drag-clipsviewer"//containment: "#clipcontainer"+i
-        }); 
+        });
     }
     
     $(".dragclip").mouseover(function () {
@@ -335,4 +335,16 @@ $(function(){
         helper: "clone",
         revert: "invalid"
     });
+
+    $( "#drag-x").droppable({
+            accept: ".drag_clone",
+            activeClass: "ui-state-hover",
+            hoverClass: "ui-state-active",
+            drop: function( event, ui ) {
+                console.log("DROPEED");
+                var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
+                $("#drag-x").append('<div id="drag'+10+'" class="drag clip" style="background-color:'+color+'"> ADDED </div>');
+            }
+
+    }); 
 });
