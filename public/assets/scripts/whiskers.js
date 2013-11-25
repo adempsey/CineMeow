@@ -198,6 +198,7 @@ function addClipToTimeline(i,color){
     $("#drag"+i).mouseout(function () {
         $(this).css('opacity', '.7');
     });
+
 }
 function resizeend() {
     var rtime = new Date(1, 1, 2000, 12,00,00);
@@ -324,16 +325,30 @@ $(function(){
         });
     }
     
-    $(".dragclip").mouseover(function () {
-        //$(this).css('opacity', '1');
+    /* $(".drag_clone" ).mouseover(function () {
+        $(this).css('opacity', '1');
     });
-    $(".dragclip").mouseout(function () {
+    $(".drag_clone" ).mouseout(function () {
         $(this).css('opacity', '.7');
-    });
+    });*/
+
 
      $( ".drag_clone" ).draggable({
-        helper: "clone",
-        revert: "invalid"
+        helper: function(event) {
+            var clone = $(event.target).clone();
+            clone.removeClass(".drag_clone");
+            clone.addClass(".drag");
+            clone.css({ "background-color": "orange", //TODO: color of clip in viewer 
+                        "width": "75px",
+                        "height": "75px",
+                        "minWidth": "75px",
+                        "minHeight": "75px",
+                        "border-radius":"8px",
+                        "opacity": ".7",
+                        "border":"none" });
+            return clone;
+        },
+        revert: "invalid",
     });
 
     $( "#drag-x").droppable({
