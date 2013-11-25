@@ -48,6 +48,7 @@ body {
 
 .clip_container {
     width: 500px;
+    max-width: 500px;
     height: 75px;
     border: 1px solid gray;
     background-color: #E0F0FF;
