@@ -249,7 +249,7 @@ function saveClips() {
 	$("#change_message").text("Saving changes...");
 	var projectJSON;
 	for(var i = 0; i < project.clips.length; i++) {
-		project.clips[i]["time_line_start_time"] = $("#start" + i).val();
+		project.clips[i]["timeline_start_time"] = $("#start" + i).val();
 		project.clips[i]["clip_length"] = $("#length" + i).val();
 	}
 
