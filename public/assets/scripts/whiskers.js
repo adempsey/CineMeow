@@ -2,7 +2,7 @@
 function addClipToData(clip){
 	//Insert clip in chronological index\
 	for(var i = 0; i < clips_data.length; i ++){
-		if(clips_data[i].start_time > clip.start_time){
+		if(clips_data[i].timeline_start_time > clip.timeline_start_time){
 			clips_data.splice(i, 0, clip);
 			inserted = true;
 			return;
@@ -33,11 +33,12 @@ function convertDataToJSON(){
 	clips_data_JSON = "{project_id:" + current_project_id +", clips: [";
 	for(var i = 0; i < clips_data.length; i ++){
 		clips_data_JSON += "{ ";
-		clips_data_JSON += "'clip_id' : " +         clips_data[i].clip_id;
-		clips_data_JSON += "'source_video_id' : " + clips_data[i].source_video_id;
-		clips_data_JSON += "'start_time' : " +      clips_data[i].start_time;
-		clips_data_JSON += "'end_time' : " + 	    clips_data[i].end_time;
-		clips_data_JSON += "'filters' : " +	        clips_data[i].filters;
+		clips_data_JSON += "'clip_id' : " +             clips_data[i].clip_id;
+		clips_data_JSON += "'source_video_id' : " +     clips_data[i].source_video_id;
+		clips_data_JSON += "'clip_start_time' : " +     clips_data[i].clip_start_time;
+        clips_data_JSON += "'timeline_start_time' : " + clips_data[i].timeline_start_time;
+		clips_data_JSON += "'clip_length' : " + 	    clips_data[i].clip_length;
+		clips_data_JSON += "'filters' : " +	            clips_data[i].filters;
 		clips_data_JSON += " }";
 	}
 	clips_data_JSON += "]}";
@@ -102,7 +103,7 @@ function requestPlay(){
 		}
 
 		starttime = $("#start" + i).val();
-		endtime = $("#end" + i).val();
+		endtime = $("#length" + i).val();
 
 		if(this.currentTime != starttime && dirty == 0) {
 			this.currentTime = starttime;
@@ -131,9 +132,9 @@ function addClipToTimeline(i,color){
     var clip=project.clips[i];
     var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
     $(timelineid).append('<div id="drag'+i+'" class="drag clip" style="background-color:'+color+'">'+clip.name+'</div>');
-    $("#drag"+i).offset({left: project.clips[i]["start_time"]*scalingFactor + $(timelineid).offset().left} );
-    $("#drag"+i).width((project.clips[i]["end_time"]-project.clips[i]["start_time"])*scalingFactor);
-    console.log("width " + (project.clips[i]["end_time"]-project.clips[i]["start_time"])*scalingFactor);
+    $("#drag"+i).offset({left: project.clips[i]["timeline_start_time"]*scalingFactor + $(timelineid).offset().left} );
+    $("#drag"+i).width((project.clips[i]["clip_length"])*scalingFactor);
+    console.log("width " + (project.clips[i]["clip_length"])*scalingFactor);
     $("#drag"+i).draggable({
                     containment: timelineid,
                     stack: ".drag",
@@ -156,7 +157,7 @@ function addClipToTimeline(i,color){
                         var idnum2 = $(this).attr('id');//.substring(5);//"drag"
                         var idnum = idnum2.substring(4);//"drag"
                         $("#start" + idnum).val(start);
-                        $("#end" + idnum).val((start+width));
+                        $("#length" + idnum).val(width);
                     }
     });
     /* make draggable div always on top */
@@ -184,7 +185,7 @@ function addClipToTimeline(i,color){
         var idnum2 = $(this).attr('id');//.substring(5);//"drag"
         var idnum = idnum2.substring(4);//"drag"
         $("#start" + idnum).val(start);
-        $("#end" + idnum).val((start+width));
+        $("#length" + idnum).val(width);
 
         rtime = new Date();
         if (timeout === false) {
@@ -232,8 +233,8 @@ $(function () {
                 i++;
                 $("#log").append('Clip ' + i);
                 i--;
-                $("#log").append('<input type="text" id="start'+i+'" value="'+project.clips[i]["start_time"]+'">');
-                $("#log").append('<input type="text" id="end'+i+'" value="'+project.clips[i]["end_time"]+'"><br/>');
+                $("#log").append('<input type="text" id="start'+i+'" value="'+project.clips[i]["timeline_start_time"]+'">');
+                $("#log").append('<input type="text" id="length'+i+'" value="'+project.clips[i]["length"]+'"><br/>');
             }
           
             init();
@@ -248,8 +249,8 @@ function saveClips() {
 	$("#change_message").text("Saving changes...");
 	var projectJSON;
 	for(var i = 0; i < project.clips.length; i++) {
-		project.clips[i]["start_time"] = $("#start" + i).val();
-		project.clips[i]["end_time"] = $("#end" + i).val();
+		project.clips[i]["time_line_start_time"] = $("#start" + i).val();
+		project.clips[i]["length"] = $("#length" + i).val();
 	}
 
 	projectJSON = JSON.stringify(project);
