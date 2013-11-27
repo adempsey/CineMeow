@@ -250,7 +250,7 @@ function saveClips() {
 	var projectJSON;
 	for(var i = 0; i < project.clips.length; i++) {
 		project.clips[i]["time_line_start_time"] = $("#start" + i).val();
-		project.clips[i]["length"] = $("#length" + i).val();
+		project.clips[i]["clip_length"] = $("#length" + i).val();
 	}
 
 	projectJSON = JSON.stringify(project);
