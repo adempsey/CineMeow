@@ -266,7 +266,7 @@ function saveClips() {
 
 	$.ajax({
 		type: "POST",
-		url: "http://cinemeow.herokuapp.com/editproject",
+		url: "http://localhost:5000/editproject",
 		data: "id="+project._id+"&data="+projectJSON,
 		success: function(data) {
 			console.log("successfully updated "+data);

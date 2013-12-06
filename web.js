@@ -68,7 +68,20 @@ app.post('/editproject', function(req, res) {
 	var id = new ObjectID(req.body["id"]);
 	var data = JSON.parse(req.body['data']);
 	delete data["_id"];
-	console.log("***RECEIEVED "+req.body['data']);
+
+	//count number of distinct video clips in timeline
+	var itemSet = {};
+	for (var item in data["clips"]) {
+		itemSet[data["clips"][item].source]=0;
+	}
+	var count = 0;
+	for (var item in itemSet) {
+		if (itemSet.hasOwnProperty(item)) {
+			count++;
+		}
+	}
+	data["numDistinctClips"] = count;
+
 	db.collection("projects", function(err, collection) {
 		collection.findOne({"_id": id}, function(err, results) {
 			if (err || !results) {
