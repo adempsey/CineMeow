@@ -11,6 +11,8 @@ block content
 				button(type="button", onclick="requestPlay();") &#9654;
 				button(type="button", onclick="requestPause();") &#x25FC;
 				button(type="button", onclick="saveClips();") Save
+				button(type="button", id="undo", disabled="true", onclick="undo(project)") UNDO
+				button(type="button", id="redo", disabled="false", onclick="redo(project)") REDO
 		div(id="clipsviewer")
 			div(id="drag-clipsviewer")
 	div(style="margin-top: 10px;")

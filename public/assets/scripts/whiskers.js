@@ -126,6 +126,9 @@ function requestPause() {
 * - the clip is not already in the timeline
 * TODO: make it so you also have to specify where the clip shows up in the timeline (for drag n drop)
 */
+var rtime = new Date(1, 1, 2000, 12,00,00);
+var timeout = false;
+var delta = 200;
 function addClipToTimeline(i,color){
     var scalingFactor = 10;
     var timelineid = "#drag-x";
@@ -223,20 +226,10 @@ $(function () {
     	url: "http://cinemeow.herokuapp.com/project?id=528a6b61e8f3c650ef000001",
 	    success: function(data) {
             project = data;
+            project.clips_stack = [];
             $('#title').text(project.name);
             $('#created_at').text("Created on "+project.created_at);  
-            for (var i in project.clips) {
-                var clip=project.clips[i];
-                var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
-                //$(timelineid).append('<div id="drag'+i+'" class="drag clip" style="background-color:'+color+'">'+clip.name+'</div>');
-                addClipToTimeline(i, color);
-                i++;
-                $("#log").append('Clip ' + i);
-                i--;
-                $("#log").append('<input type="text" id="start'+i+'" value="'+project.clips[i]["timeline_start_time"]+'">');
-                $("#log").append('<input type="text" id="length'+i+'" value="'+project.clips[i]["length"]+'"><br/>');
-            }
-          
+            populateTimelineWithCurrentClips();
             init();
         },
         error: function(XMLHTTPRequest, textStatus, error) {
@@ -244,7 +237,19 @@ $(function () {
         }
         });
     });
-
+function populateTimelineWithCurrentClips(){
+    for (var i in project.clips) {
+        var clip=project.clips[i];
+        var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
+        //$(timelineid).append('<div id="drag'+i+'" class="drag clip" style="background-color:'+color+'">'+clip.name+'</div>');
+        addClipToTimeline(i, color);
+        i++;
+        $("#log").append('Clip ' + i);
+        i--;
+        $("#log").append('<input type="text" id="start'+i+'" value="'+project.clips[i]["timeline_start_time"]+'">');
+        $("#log").append('<input type="text" id="length'+i+'" value="'+project.clips[i]["clip_length"]+'"><br/>');
+    }
+}
 function saveClips() {
 	$("#change_message").text("Saving changes...");
 	var projectJSON;
@@ -256,6 +261,8 @@ function saveClips() {
 	projectJSON = JSON.stringify(project);
 	console.log(projectJSON);
 	console.log(project);
+    //Add to UndoStack
+    updateProject(projectJSON, project);
 
 	$.ajax({
 		type: "POST",
@@ -367,3 +374,19 @@ $(function(){
 
     }); 
 });
+
+
+function updateUndoRedoButtons(){
+    if(project.clips_redo_stack.length > 0){
+        console.log("ENABLING R")
+        $("#redo").prop("disabled",false);
+    }else{
+        $("#redo").prop("disabled",true);
+    }
+    if(project.clips_stack.length > 0){
+           console.log("ENABLING U " + project.clips_stack.length)
+        $("#undo").prop("disabled",false);
+    }else{
+        $("#undo").prop("disabled",true);
+    }
+}

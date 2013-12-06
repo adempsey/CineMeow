@@ -33,32 +33,38 @@ function addSourceVideoToProject(project_id, videoClip){
 }
 
 //Add clips to project clips stack
-function updateProject(clips_data_JSON){
-	var clips_data = JSON.parse(jsonString);
-	var project = projects[clips_data.project_id];
+function updateProject(clips_data_JSON, project){
+	var clips_data = JSON.parse(clips_data_JSON);
+	if(!project.clips_stack){
+		project.clips_stack = [];
+	}
 	project.clips_stack.unshift(clips_data.clips);
 	if(project.clips_stack.length > maxClipsStackSize){
 		project.clips_stack.pop();
 	}
+	project.clips_redo_stack = [];
+	updateUndoRedoButtons();
 }
 
 //Undo last modifications to clips in project
-function undo(project_id){
-	var project = projects[project_id];
+function undo(project){
 	project.clips_redo_stack.unshift(project.clips_stack.shift());
 	if(project.clips_redo_stack.length > maxClipsStackSize){
 		project.clips_redo_stack.pop();
 	}
+	updateUndoRedoButtons();
 }
 
 //Redo last modification to clips in project
-function redo(project_id){
-	var project = projects[project_id];
+function redo(project){
 	project.clips_stack.unshift(project.clips_redo_stack.shift());
 	if(project.clips_stack.length > maxClipsStackSize){
 		project.clips_stack.pop();
 	}
+	updateUndoRedoButtons();
 }
+
+
 
 //Return current clips object in given project
 function getCurrentClips(project_id){
