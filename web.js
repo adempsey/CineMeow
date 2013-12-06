@@ -50,7 +50,8 @@ app.post('/newproject', function(req, res) {
 		collection.insert( {
 			name: req.body["name"],
 			created_at: (new Date()).toString(),
-			clips: []
+			clips: [],
+			numDistinctClips: 0
 		}, function(err, inserted) {
 			if (err) {
 				console.log(err);
