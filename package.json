@@ -3,7 +3,8 @@
 	"version":"0.0.1",
 	"dependencies":{
 		"express":"latest",
-		"mongodb":"latest"
+		"mongodb":"latest",
+		"aws-sdk":"latest"
 	},
 	"engines": {
 		"node" : "0.10.x",

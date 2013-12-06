@@ -6,6 +6,8 @@ app.set('title', 'CineMeow');
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
+var AWS = require("aws-sdk");
+
 var mongo = require('mongodb');
 var mongourl = 'mongodb://admin:meowmeow@paulo.mongohq.com:10029/app19434598';
 var db = mongo.Db.connect(mongourl, function(error, dbConnection) { db=dbConnection; });
@@ -48,7 +50,8 @@ app.post('/newproject', function(req, res) {
 		collection.insert( {
 			name: req.body["name"],
 			created_at: (new Date()).toString(),
-			clips: []
+			clips: [],
+			numDistinctClips: 0
 		}, function(err, inserted) {
 			if (err) {
 				console.log(err);
@@ -81,6 +84,23 @@ app.post('/editproject', function(req, res) {
 				res.send(200);
 			}
 		});
+	});
+});
+
+app.get('/cliplist', function(req, res) {
+	AWS.config.update({accessKeyId: 'AKIAIGUBB7DTOBPXCNHA', secretAccessKey: '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'});
+	var s3 = new AWS.S3({params: {Bucket: "media.cinemeow", Key: 'AKIAIGUBB7DTOBPXCNHA'}});
+	s3.listObjects(function(err, data) {
+		if (err) {
+			console.log(err);
+			res.send(400);
+		} else {
+			var itemArray = []
+			for (var item in data["Contents"]) {
+				itemArray.push(data["Contents"][item]["Key"]);
+			}
+			res.send(JSON.stringify(itemArray));
+		}
 	});
 });
 
