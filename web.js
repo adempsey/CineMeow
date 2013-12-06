@@ -86,7 +86,7 @@ app.post('/editproject', function(req, res) {
 	});
 });
 
-app.post('/cliplist', function(req, res) {
+app.get('/cliplist', function(req, res) {
 	AWS.config.update({accessKeyId: 'AKIAIGUBB7DTOBPXCNHA', secretAccessKey: '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'});
 	var s3 = new AWS.S3({params: {Bucket: "media.cinemeow", Key: 'AKIAIGUBB7DTOBPXCNHA'}});
 	s3.listObjects(function(err, data) {
