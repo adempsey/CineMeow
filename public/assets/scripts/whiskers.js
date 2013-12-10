@@ -93,7 +93,7 @@ function requestPlay(){
 	var dirty = 0;
 	var i = 0;
 	$("video").get(0).play();
-	var starttime, endtime;
+	var starttime, endtime, clip_length;
 
 	$("video").on('timeupdate', function() {
 		if(i == project.clips.length) {
@@ -102,8 +102,11 @@ function requestPlay(){
 			return false;
 		}
 
-		starttime = $("#start" + i).val();
-		endtime = $("#length" + i).val();
+		starttime = parseInt($("#start" + i).val());
+		clip_length = parseInt($("#length" + i).val());
+        endtime = starttime + clip_length;
+
+        console.log(endtime);
 
 		if(this.currentTime != starttime && dirty == 0) {
 			this.currentTime = starttime;
@@ -130,6 +133,7 @@ var rtime = new Date(1, 1, 2000, 12,00,00);
 var timeout = false;
 var delta = 200;
 function addClipToTimeline(i,color){
+    console.log(project.clips.length);
     var scalingFactor = 10;
     var timelineid = "#drag-x";
     var clip = project["clips"][i];
@@ -313,6 +317,7 @@ $(function(){
         console.log("width " + (project.clips[i]["end_time"]-project.clips[i]["start_time"])*scalingFactor);
     }*/
     var container_count = 2;
+    /*
     //HARDCODED:
       $("#drag-clipsviewer").append('<table id="clipsource'+0+'"  class= "clip_source" style=" width: 530px, background-color: black"> </table>');
       $("#drag-clipsviewer").append('<table id="clipsource'+1+'"  class= "clip_source" style=" width: 530px, background-color: black"> </table>');
@@ -326,6 +331,9 @@ $(function(){
       $("#clipcontainer" +0).append('<div id="dragclip'+0+'" class="dragclip drag" style="background-color:'+color+'"> some clip </div>');
       var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
       $("#clipcontainer" +1).append('<div id="dragclip'+1+'" class="dragclip drag" style="background-color:'+color+'"> some other clip </div>');
+      */
+    retrieveVideos();
+
     /* X axis only */
     for(var i = 0; i < container_count; i ++){
         $("#dragclip"+i).draggable({
@@ -394,6 +402,30 @@ $(function(){
     }); 
 });
 
+function retrieveVideos() {
+    $.ajax({
+        type: "GET",
+        url: "/cliplist",
+        success: function(data) {
+            clipList = JSON.parse(data);
+            cliprow=0;
+            $("#drag-clipsviewer").empty();
+            $("#drag-clipsviewer").append('<table id="cliprepo">');
+            for (i in clipList) {
+                if (i % 5 == 0) {
+                    $("#cliprepo").append('<tr id="cliprow'+cliprow+'" class="clip_source" style="width: 530px">');
+                } 
+                $("#cliprow" + cliprow).append('<td><div id="dragclone'+0+'" class="drag_clone">drag</div></td>' +'<td><div id="clipcontainer'+i+'" class="clip_container" style="background-color: #E0F0FF">'+clipList[i]+'</div></td>'); 
+                if (i % 5 == 4) {
+                    $("#drag-clipsviewer").append('</tr>');
+                    cliprow++;
+                }
+            }
+            $("#drag-clipsviewer").append('</table>');
+        }
+    });
+}
+
 
 function updateUndoRedoButtons(){
     //REDO
@@ -411,3 +443,44 @@ function updateUndoRedoButtons(){
         $("#undo").prop("disabled",true);
     }
 }
+
+function uploadVideo() {
+    $("#fileupload").trigger('click');
+    $("#fileupload").change(function() {
+        var file = document.getElementById('fileupload').files[0];
+
+        AWS.config.update({accessKeyId: 'AKIAIGUBB7DTOBPXCNHA', secretAccessKey: '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'});
+        var bucket = new AWS.S3({params: {Bucket: 'media.cinemeow'}});
+
+        var params = {Key: file.name, ContentType: file.type, Body:file};
+        bucket.putObject(params, function(err, data) {
+            $("#change_message").text(err ? 'Error uploading video': 'Video uploaded successfully');
+            retrieveVideos();
+        });
+    });
+}
+
+function removeNewProjectDialogue() {
+    $("#newProjWindow").remove();
+    $(".blackout").remove();
+}
+
+function newProject() {
+    $.ajax({
+        type: "POST",
+        url: "/newproject",
+        data: "name="+$("#newProjectName").val()+"&password="+$("#newProjectPassword").val(),
+        success: function(data) {
+            window.location = "/project?id="+data;
+        }
+    });
+}
+
+function newProjectDialogue() {
+    $("body").append("<div class='blackout'></div>");
+    $("body").append("<div id='newProjWindow'><h1>Create New Project</h1></div>");
+    $("#newProjWindow").append("<input type='text' id='newProjectName' placeholder='Project Name' style='width: 300px; font-size: 20px; text-align: center;'/><br /><br />");
+    $("#newProjWindow").append("<input type='password' id='newProjectPassword' placeholder='Project Password' style='width: 300px; font-size: 20px; text-align: center;'/><br />");
+    $("#newProjWindow").append("<br /><button type='button' onclick='removeNewProjectDialogue();'>Cancel</button><button type='button' onclick='newProject();'>Submit</button>");
+}
+

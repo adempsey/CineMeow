@@ -1,10 +1,14 @@
 body {
 	font-family: 'verdana';
-    background-image: url('../images/cat_director.png');
+    /*background-image: url('../images/cat_director.png');*/
 }
 
 #content {
 	width: 100%;
+}
+
+#main {
+    text-align: center;
 }
 
 .drag {
@@ -47,14 +51,17 @@ body {
 }
 
 .clip_container {
-    width: 500px;
+    width: 90px;
     max-width: 500px;
     height: 75px;
     border: 1px solid gray;
     background-color: #E0F0FF;
-    padding-right: 5px;
-    float: right;
+    padding: 5px;
+    float: left;
     margin-left: none;
+    font-size: 12px;
+    text-align: center;
+    word-wrap: break-word;
 }
 
 #main_container {
@@ -75,5 +82,31 @@ body {
     width: 540px;
 }
 .clip_source{
+}
+
+.blackout {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background-color: #000000;
+    opacity: 0.5;
+    position: absolute;
+    margin: 0;
+}
+
+#newProjWindow {
+    width: 600px;
+    height: 230px;
+    position: absolute;
+    left: 50%;
+    margin-left:-320px;
+    top: 200px;
+    background-color: #FFFFFF;
+    z-index: 200;
+    text-align: center;
+    padding: 20px;
+    border-radius: 20px;
 }
 
