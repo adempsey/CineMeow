@@ -7,6 +7,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 var AWS = require("aws-sdk");
+AWS.config.update({accessKeyId: 'AKIAIGUBB7DTOBPXCNHA', secretAccessKey: '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'});
 
 var mongo = require('mongodb');
 var mongourl = 'mongodb://admin:meowmeow@paulo.mongohq.com:10029/app19434598';
@@ -47,16 +48,20 @@ app.get('/project', function(req, res) {
 /* generates new project skeleton */
 app.post('/newproject', function(req, res) {
 	db.collection("projects", function(err, collection) {
+		bucketname = req.body["name"].replace(/[^\w]/gi, '');
 		collection.insert( {
 			name: req.body["name"],
 			created_at: (new Date()).toString(),
 			clips: [],
-			numDistinctClips: 0
+			numDistinctClips: 0,
+			bucket: bucketname
 		}, function(err, inserted) {
 			if (err) {
 				console.log(err);
 				res.send(400);
 			} else {
+				var newBucket = new AWS.S3({params: {Bucket: bucketname+'.cinemeow'}});
+				newBucket.createBucket(function() {});
 				res.send(200);
 			}
 		});
@@ -101,7 +106,6 @@ app.post('/editproject', function(req, res) {
 });
 
 app.get('/cliplist', function(req, res) {
-	AWS.config.update({accessKeyId: 'AKIAIGUBB7DTOBPXCNHA', secretAccessKey: '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'});
 	var s3 = new AWS.S3({params: {Bucket: "media.cinemeow", Key: 'AKIAIGUBB7DTOBPXCNHA'}});
 	s3.listObjects(function(err, data) {
 		if (err) {
