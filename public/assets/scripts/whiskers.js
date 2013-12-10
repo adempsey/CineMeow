@@ -313,15 +313,8 @@ $(function(){
       var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
       $("#clipcontainer" +1).append('<div id="dragclip'+1+'" class="dragclip drag" style="background-color:'+color+'"> some other clip </div>');
       */
+    retrieveVideos();
 
-    var numclips = 2;
-    var i = 0;
-    for(i = 0; i < numclips; i++) {
-       $("#drag-clipsviewer").append('<table id="clipsource'+i+'" class="clip_source" style="width: 530px;"> </table>');
-       $("#clipsource" + i).append('<tr><td><div id="dragclone'+0+'" class="drag_clone">drag</div></td>' +
-            '<td><div id="clipcontainer'+i+'" class="clip_container" style="background-color: #E0F0FF"></div></td></tr>'); 
-    }
-    
     /* X axis only */
     for(var i = 0; i < container_count; i ++){
         $("#dragclip"+i).draggable({
@@ -389,6 +382,21 @@ $(function(){
 
     }); 
 });
+
+function retrieveVideos() {
+    $("#drag-clipsviewer").empty();
+    $.ajax({
+        type: "GET",
+        url: "/cliplist",
+        success: function(data) {
+            clipList = JSON.parse(data);
+            for (i in clipList) {
+                $("#drag-clipsviewer").append('<table id="clipsource'+i+'" class="clip_source" style="width: 530px;"> </table>');
+                $("#clipsource" + i).append('<tr><td><div id="dragclone'+0+'" class="drag_clone">drag</div></td>' +'<td><div id="clipcontainer'+i+'" class="clip_container" style="background-color: #E0F0FF">'+clipList[i]+'</div></td></tr>'); 
+            }
+        }
+    });
+}
 
 
 function updateUndoRedoButtons(){
