@@ -47,14 +47,17 @@ body {
 }
 
 .clip_container {
-    width: 500px;
+    width: 90px;
     max-width: 500px;
     height: 75px;
     border: 1px solid gray;
     background-color: #E0F0FF;
-    padding-right: 5px;
-    float: right;
+    padding: 5px;
+    float: left;
     margin-left: none;
+    font-size: 12px;
+    text-align: center;
+    word-wrap: break-word;
 }
 
 #main_container {

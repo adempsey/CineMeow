@@ -384,16 +384,25 @@ $(function(){
 });
 
 function retrieveVideos() {
-    $("#drag-clipsviewer").empty();
     $.ajax({
         type: "GET",
         url: "/cliplist",
         success: function(data) {
             clipList = JSON.parse(data);
+            cliprow=0;
+            $("#drag-clipsviewer").empty();
+            $("#drag-clipsviewer").append('<table id="cliprepo">');
             for (i in clipList) {
-                $("#drag-clipsviewer").append('<table id="clipsource'+i+'" class="clip_source" style="width: 530px;"> </table>');
-                $("#clipsource" + i).append('<tr><td><div id="dragclone'+0+'" class="drag_clone">drag</div></td>' +'<td><div id="clipcontainer'+i+'" class="clip_container" style="background-color: #E0F0FF">'+clipList[i]+'</div></td></tr>'); 
+                if (i % 5 == 0) {
+                    $("#cliprepo").append('<tr id="cliprow'+cliprow+'" class="clip_source" style="width: 530px">');
+                } 
+                $("#cliprow" + cliprow).append('<td><div id="dragclone'+0+'" class="drag_clone">drag</div></td>' +'<td><div id="clipcontainer'+i+'" class="clip_container" style="background-color: #E0F0FF">'+clipList[i]+'</div></td>'); 
+                if (i % 5 == 4) {
+                    $("#drag-clipsviewer").append('</tr>');
+                    cliprow++;
+                }
             }
+            $("#drag-clipsviewer").append('</table>');
         }
     });
 }
