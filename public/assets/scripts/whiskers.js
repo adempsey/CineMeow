@@ -425,6 +425,7 @@ function uploadVideo() {
         var params = {Key: file.name, ContentType: file.type, Body:file};
         bucket.putObject(params, function(err, data) {
             $("#change_message").text(err ? 'Error uploading video': 'Video uploaded successfully');
+            retrieveVideos();
         });
     });
 }
