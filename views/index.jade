@@ -4,7 +4,7 @@ block content
 	h2(id="title")
 	div(id="main_container")
 		div(id="videoplayer")
-			video(width='512', height='300')
+			video(width='512', height='300', controls='controls')
 				source(src='http://media.cinemeow.s3.amazonaws.com/eyebrows.mp4', type='video/mp4')
 					| Your browser does not support the video tag.
 			div(style="width: 500px; text-align: center;")
@@ -19,9 +19,9 @@ block content
 			div(id="drag-clipsviewer")
 	div(style="margin-top: 10px;")
 		div(id="drag-x")
-	div(id="info", style="display: none;")
+	div(id="info")
 
-	div(id="log", style="display: none;")
+	div(id="log")
 
 	div(id="change_message", style="color: #CCCCCC;")
 
