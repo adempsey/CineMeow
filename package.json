@@ -5,7 +5,7 @@
 		"express":"latest",
 		"mongodb":"latest",
 		"aws-sdk":"latest",
-		"jade":"*"
+		"jade":"latest"
 	},
 	"engines": {
 		"node" : "0.10.x",
