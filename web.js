@@ -7,10 +7,14 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 var AWS = require("aws-sdk");
+AWS.config.update({accessKeyId: 'AKIAIGUBB7DTOBPXCNHA', secretAccessKey: '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'});
 
 var mongo = require('mongodb');
 var mongourl = 'mongodb://admin:meowmeow@paulo.mongohq.com:10029/app19434598';
 var db = mongo.Db.connect(mongourl, function(error, dbConnection) { db=dbConnection; });
+
+var crypto = require("crypto");
+var md5 = crypto.createHash("md5");
 
 //Test public 
 //app.use(express.static(__dirname + '/public'));
@@ -26,6 +30,10 @@ app.configure(function(){
 
 app.get('/', function(request, response) {
 	response.render('index');
+});
+
+app.get('/main', function(request, response) {
+	response.render('main');
 });
 
 /* returns project data for a given project id */
@@ -47,17 +55,24 @@ app.get('/project', function(req, res) {
 /* generates new project skeleton */
 app.post('/newproject', function(req, res) {
 	db.collection("projects", function(err, collection) {
+		var password = crypto.createHash('sha1').update(req.body["password"]).digest('hex');
+		bucketname = req.body["name"].replace(/[^\w]/gi, '');
 		collection.insert( {
 			name: req.body["name"],
+			password: password,
 			created_at: (new Date()).toString(),
 			clips: [],
-			numDistinctClips: 0
+			numDistinctClips: 0,
+			bucket: bucketname
 		}, function(err, inserted) {
 			if (err) {
 				console.log(err);
 				res.send(400);
 			} else {
-				res.send(200);
+				var newBucket = new AWS.S3({params: {Bucket: bucketname+'.cinemeow'}});
+				newBucket.createBucket(function() {});
+				console.log(inserted);
+				res.send(inserted[0]["_id"], 200);
 			}
 		});
 	});
@@ -101,7 +116,6 @@ app.post('/editproject', function(req, res) {
 });
 
 app.get('/cliplist', function(req, res) {
-	AWS.config.update({accessKeyId: 'AKIAIGUBB7DTOBPXCNHA', secretAccessKey: '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'});
 	var s3 = new AWS.S3({params: {Bucket: "media.cinemeow", Key: 'AKIAIGUBB7DTOBPXCNHA'}});
 	s3.listObjects(function(err, data) {
 		if (err) {

@@ -1,6 +1,7 @@
 extend layout
 block content
 	h1(id="header") CloudCut
+	button(type="button", onclick="newProjectDialogue();") New Project
 	h2(id="title")
 	div(id="main_container")
 		div(id="videoplayer")
@@ -15,9 +16,13 @@ block content
 				button(type="button", onclick="requestPause();") &#x25FC;
 				button(type="button", onclick="saveClips();") Save
 				button(type="button", id="undo", disabled="true", onclick="undo(project)") UNDO
+<<<<<<< HEAD
+				button(type="button", id="redo", disabled="true", onclick="redo(project)") REDO
+=======
 				button(type="button", id="redo", disabled="false", onclick="redo(project)") REDO
 				button(type="button", id="uploadButton", onclick="uploadVideo()") Upload Video
 				input(type="file", id="fileupload", style="display: none;")
+>>>>>>> bdbde1198f19e55b5b588b99de5f8d6d416854d7
 		div(id="clipsviewer")
 			div(id="drag-clipsviewer")
 
