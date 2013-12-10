@@ -1,10 +1,14 @@
 body {
 	font-family: 'verdana';
-    background-image: url('../images/cat_director.png');
+    /*background-image: url('../images/cat_director.png');*/
 }
 
 #content {
 	width: 100%;
+}
+
+#main {
+    text-align: center;
 }
 
 .drag {

@@ -29,6 +29,10 @@ app.get('/', function(request, response) {
 	response.render('index');
 });
 
+app.get('/main', function(request, response) {
+	response.render('main');
+});
+
 /* returns project data for a given project id */
 app.get('/project', function(req, res) {
 	var ObjectID = mongo.ObjectID;
