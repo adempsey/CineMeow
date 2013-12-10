@@ -13,6 +13,8 @@ block content
 				button(type="button", onclick="saveClips();") Save
 				button(type="button", id="undo", disabled="true", onclick="undo(project)") UNDO
 				button(type="button", id="redo", disabled="false", onclick="redo(project)") REDO
+				button(type="button", id="uploadButton", onclick="uploadVideo()") Upload Video
+				input(type="file", id="fileupload", style="display: none;")
 		div(id="clipsviewer")
 			div(id="drag-clipsviewer")
 	div(style="margin-top: 10px;")
@@ -23,6 +25,7 @@ block content
 
 	div(id="change_message", style="color: #CCCCCC;")
 
+	script(src='/assets/scripts/aws-sdk-1.10.0.min.js')
 	script(src='/assets/scripts/whiskers.js')
 	script(src='/assets/scripts/tail.js')
 	script(src='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css')

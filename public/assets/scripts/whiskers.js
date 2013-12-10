@@ -403,3 +403,18 @@ function updateUndoRedoButtons(){
         $("#undo").prop("disabled",true);
     }
 }
+
+function uploadVideo() {
+    $("#fileupload").trigger('click');
+    $("#fileupload").change(function() {
+        var file = document.getElementById('fileupload').files[0];
+
+        AWS.config.update({accessKeyId: 'AKIAIGUBB7DTOBPXCNHA', secretAccessKey: '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'});
+        var bucket = new AWS.S3({params: {Bucket: 'media.cinemeow'}});
+
+        var params = {Key: file.name, ContentType: file.type, Body:file};
+        bucket.putObject(params, function(err, data) {
+            $("#change_message").text(err ? 'Error uploading video': 'Video uploaded successfully');
+        });
+    });
+}

@@ -22,7 +22,7 @@
 
 			var params = {Key: file.name, ContentType: file.type, Body: file};
 			bucket.putObject(params, function (err, data) {
-				results.innerHTML = err ? 'ERROR!' : 'UPLOADED.';
+				results.innerHTML = err ? 'ERROR! '+err : 'UPLOADED.';
 			});
 		} else {
 			results.innerHTML = 'Nothing to upload.';
