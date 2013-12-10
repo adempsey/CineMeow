@@ -13,6 +13,9 @@ var mongo = require('mongodb');
 var mongourl = 'mongodb://admin:meowmeow@paulo.mongohq.com:10029/app19434598';
 var db = mongo.Db.connect(mongourl, function(error, dbConnection) { db=dbConnection; });
 
+var crypto = require("crypto");
+var md5 = crypto.createHash("md5");
+
 //Test public 
 //app.use(express.static(__dirname + '/public'));
 app.configure(function(){
@@ -52,9 +55,11 @@ app.get('/project', function(req, res) {
 /* generates new project skeleton */
 app.post('/newproject', function(req, res) {
 	db.collection("projects", function(err, collection) {
+		var password = crypto.createHash('sha1').update(req.body["password"]).digest('hex');
 		bucketname = req.body["name"].replace(/[^\w]/gi, '');
 		collection.insert( {
 			name: req.body["name"],
+			password: password,
 			created_at: (new Date()).toString(),
 			clips: [],
 			numDistinctClips: 0,
