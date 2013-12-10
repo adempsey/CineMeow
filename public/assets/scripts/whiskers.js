@@ -448,7 +448,7 @@ function newProject() {
     $.ajax({
         type: "POST",
         url: "/newproject",
-        data: "name="+$("#newProjectName").val(),
+        data: "name="+$("#newProjectName").val()+"&password="+$("#newProjectPassword").val(),
         success: function(data) {
             window.location = "/project?id="+data;
         }
@@ -458,7 +458,8 @@ function newProject() {
 function newProjectDialogue() {
     $("body").append("<div class='blackout'></div>");
     $("body").append("<div id='newProjWindow'><h1>Create New Project</h1></div>");
-    $("#newProjWindow").append("<input type='text' id='newProjectName' placeholder='Project Name' style='width: 300px; font-size: 20px; text-align: center;'/><br />");
+    $("#newProjWindow").append("<input type='text' id='newProjectName' placeholder='Project Name' style='width: 300px; font-size: 20px; text-align: center;'/><br /><br />");
+    $("#newProjWindow").append("<input type='password' id='newProjectPassword' placeholder='Project Password' style='width: 300px; font-size: 20px; text-align: center;'/><br />");
     $("#newProjWindow").append("<br /><button type='button' onclick='removeNewProjectDialogue();'>Cancel</button><button type='button' onclick='newProject();'>Submit</button>");
 }
 
