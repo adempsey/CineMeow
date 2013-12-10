@@ -1,53 +1,53 @@
 //Adds video at correct location, and generates an ID for it?
 function addClipToData(clip){
-	//Insert clip in chronological index\
-	for(var i = 0; i < clips_data.length; i ++){
-		if(clips_data[i].timeline_start_time > clip.timeline_start_time){
-			clips_data.splice(i, 0, clip);
-			inserted = true;
-			return;
-		}
-	}
-	clips_data.push(clip);
+    //Insert clip in chronological index\
+    for(var i = 0; i < clips_data.length; i ++){
+        if(clips_data[i].timeline_start_time > clip.timeline_start_time){
+            clips_data.splice(i, 0, clip);
+            inserted = true;
+            return;
+        }
+    }
+    clips_data.push(clip);
 }
 
 //Remove clip from data
 function removeClipFromData(clip){
-	var clip_id = clip.clip_id;
-	for(var i = 0; i < clips_data.length; i ++){
-		if(clips_data[i].clip_id == clip_id){
-			clips_data.splice(i,1);
-		}
-		return;
-	}
-	console.log("clip not found in data array");
+    var clip_id = clip.clip_id;
+    for(var i = 0; i < clips_data.length; i ++){
+        if(clips_data[i].clip_id == clip_id){
+            clips_data.splice(i,1);
+        }
+        return;
+    }
+    console.log("clip not found in data array");
 }
 
 //If clip is updated, its time might change, so remove it and reinsert it into the array 
 function updateClip(clip){
-	removeClipFromData(clip);
-	addClipToData(clip);
+    removeClipFromData(clip);
+    addClipToData(clip);
 }
 
 function convertDataToJSON(){
-	clips_data_JSON = "{project_id:" + current_project_id +", clips: [";
-	for(var i = 0; i < clips_data.length; i ++){
-		clips_data_JSON += "{ ";
-		clips_data_JSON += "'clip_id' : " +             clips_data[i].clip_id;
-		clips_data_JSON += "'source_video_id' : " +     clips_data[i].source_video_id;
-		clips_data_JSON += "'clip_start_time' : " +     clips_data[i].clip_start_time;
+    clips_data_JSON = "{project_id:" + current_project_id +", clips: [";
+    for(var i = 0; i < clips_data.length; i ++){
+        clips_data_JSON += "{ ";
+        clips_data_JSON += "'clip_id' : " +             clips_data[i].clip_id;
+        clips_data_JSON += "'source_video_id' : " +     clips_data[i].source_video_id;
+        clips_data_JSON += "'clip_start_time' : " +     clips_data[i].clip_start_time;
         clips_data_JSON += "'timeline_start_time' : " + clips_data[i].timeline_start_time;
-		clips_data_JSON += "'clip_length' : " + 	    clips_data[i].clip_length;
-		clips_data_JSON += "'filters' : " +	            clips_data[i].filters;
-		clips_data_JSON += " }";
-	}
-	clips_data_JSON += "]}";
+        clips_data_JSON += "'clip_length' : " +         clips_data[i].clip_length;
+        clips_data_JSON += "'filters' : " +             clips_data[i].filters;
+        clips_data_JSON += " }";
+    }
+    clips_data_JSON += "]}";
 }
 
 function convertJSONtoData(json){
-	var parsed = JSON.parse(infoJSON);
-	current_project_id = parsed.project_id;
-	clips_data = parsed.clips;
+    var parsed = JSON.parse(infoJSON);
+    current_project_id = parsed.project_id;
+    clips_data = parsed.clips;
 }
 
 // intial loading
@@ -56,70 +56,115 @@ var endtime = 15;
 var starttime2 = 20;
 var endtime2 = 24;
 
-function init() {
-	$("#active_video").on('loadedmetadata', requestPlay);
-}
-
 function getClipsJSON (){
-	return clips_data_JSON;
+    return clips_data_JSON;
 }
 
 function getClipsObjectArray (){
-	return clips_data; //Warning: big security risk here, probably should clone; but the caveat is that deep cloning is a lot slower...
+    return clips_data; //Warning: big security risk here, probably should clone; but the caveat is that deep cloning is a lot slower...
 }
 
 //Gonna needs:
 //Undo
 function undo(){
-	//Send request to server for undo
-	var returnedJSON = "";
-	clips_data_JSON = returnedJSON;
-	convertJSONtoData(returnedJSON);
+    //Send request to server for undo
+    var returnedJSON = "";
+    clips_data_JSON = returnedJSON;
+    convertJSONtoData(returnedJSON);
 }
 //Redo
 function redo(){
-	//Send request to server for redo
-	var returnedJSON = "";
-	clips_data_JSON = returnedJSON;
-	convertJSONtoData(returnedJSON);
+    //Send request to server for redo
+    var returnedJSON = "";
+    clips_data_JSON = returnedJSON;
+    convertJSONtoData(returnedJSON);
 }
 
 //Modify Clip
 function clipWasModified(clip){
-	updateClip(clip);
+    updateClip(clip);
 }
 //Request Play 
-function requestPlay(){
-	var dirty = 0;
-	var i = 0;
-	$("#active_video")[0].play();
-	var starttime, endtime, clip_length;
+function requestPlay() {
+    var source = $("#videoplayer video:first-child").attr("id");
+    /*console.log($("#" + source));
+    console.log($("#" + source)[0].currentTime);
+    console.log($("#" + source).get(0).currentTime);*/
+    playClips(source, 0);
+}
 
-	$("#active_video").on('timeupdate', function() {
-		if(i == project.clips.length) {
-			this.pause();
-			i = 0;
-			return false;
-		}
+var interval = 0;
 
-		starttime = parseInt($("#start" + i).val());
-		clip_length = parseInt($("#length" + i).val());
+function playClips(source, clip_order){
+    console.log("===STARTING PLAYCLIPS===");
+    console.log(project.clips);
+    var dirty = 0;
+    var swap = 0;
+    var i = clip_order;
+    var swap_i;
+    var nextsource;
+    $("#" + source)[0].play();
+    var starttime, endtime, clip_length;
+    console.log("source: " + source + " i: " + i + " len: " + project.clips.length);
+
+    var callback = function() {
+        console.log("i: " + i);
+        if(i == project.clips.length) {
+            $("#" + source)[0].pause();
+            window.clearInterval(interval);
+            console.log("STOPPED");
+            return false;
+        }
+
+        if(i+1 < project.clips.length) {
+            nextsource = project.clips[i+1]["source"];
+            nextsource = nextsource.slice(0, -4);
+            console.log("i+1: " + nextsource);
+            console.log("swap var: " + swap);
+
+            if(nextsource != source && swap == 0) {
+                console.log("nextsource is diff: " + nextsource);
+                swap_i = i+1;
+                console.log("swap_i: " + swap_i);
+                swap = 1;
+            }
+        }
+
+        starttime = parseInt($("#start" + i).val());
+        clip_length = parseInt($("#length" + i).val());
         endtime = starttime + clip_length;
 
-		if(this.currentTime != starttime && dirty == 0) {
-			this.currentTime = starttime;
-			dirty = 1;
-		}
+        // sets start of specified clip to play
+        if($("#" + source)[0].currentTime != starttime && dirty == 0) {
+            $("#" + source)[0].currentTime = starttime;
+            dirty = 1;
+        }
 
-		if(this.currentTime > endtime && dirty == 1) {;
-			dirty = 0;
-			i++;
-		}
-	});
+        // move to the next clip
+        if($("#" + source)[0].currentTime > endtime && dirty == 1) {
+            console.log("I made it!");
+            dirty = 0;
+            i++;
+
+            if(swap == 1 && i == swap_i) {
+                console.log("swapping to: " + nextsource);
+                $("#" + source)[0].pause();
+                swap = 0;
+                source = nextsource;
+                $("#" + source)[0].play();
+                return false;
+            }
+        }
+    };
+
+    var interval = window.setInterval(callback, 1000);
 }
 
 function requestPause() {
-	$("#active_video")[0].pause();
+    $("#eyebrows")[0].pause();
+    interval++;
+    window.clearInterval(interval);
+    console.log("KILLED");
 }
 
 /* Note: this is assuming:
@@ -131,7 +176,7 @@ var rtime = new Date(1, 1, 2000, 12,00,00);
 var timeout = false;
 var delta = 200;
 function addClipToTimeline(i,color){
-    console.log(project.clips.length);
+//    console.log(project.clips.length);
     var scalingFactor = 10;
     var timelineid = "#drag-x";
     var clip=project.clips[i];
@@ -139,7 +184,7 @@ function addClipToTimeline(i,color){
     $(timelineid).append('<div id="drag'+i+'" class="drag clip" style="background-color:'+color+'">'+clip.name+'</div>');
     $("#drag"+i).offset({left: project.clips[i]["timeline_start_time"]*scalingFactor + $(timelineid).offset().left} );
     $("#drag"+i).width((project.clips[i]["clip_length"])*scalingFactor);
-    console.log("width " + (project.clips[i]["clip_length"])*scalingFactor);
+//    console.log("width " + (project.clips[i]["clip_length"])*scalingFactor);
     $("#drag"+i).draggable({
                     containment: timelineid,
                     stack: ".drag",
@@ -224,15 +269,14 @@ $(function () {
 
 
     $.ajax({
-    	type: "GET",
-    	url: "http://cinemeow.herokuapp.com/project?id=528a6b61e8f3c650ef000001",
-	    success: function(data) {
+        type: "GET",
+        url: "http://cinemeow.herokuapp.com/project?id=528a6b61e8f3c650ef000001",
+        success: function(data) {
             project = data;
             project.clips_stack = [];
             $('#title').text(project.name);
             $('#created_at').text("Created on "+project.created_at);  
             populateTimelineWithCurrentClips();
-            init();
         },
         error: function(XMLHTTPRequest, textStatus, error) {
             console.log(XMLHTTPRequest+" "+error);
@@ -253,33 +297,33 @@ function populateTimelineWithCurrentClips(){
     }
 }
 function saveClips() {
-	$("#change_message").text("Saving changes...");
-	var projectJSON;
-	for(var i = 0; i < project.clips.length; i++) {
-		project.clips[i]["timeline_start_time"] = $("#start" + i).val();
-		project.clips[i]["clip_length"] = $("#length" + i).val();
-	}
+    $("#change_message").text("Saving changes...");
+    var projectJSON;
+    for(var i = 0; i < project.clips.length; i++) {
+        project.clips[i]["timeline_start_time"] = $("#start" + i).val();
+        project.clips[i]["clip_length"] = $("#length" + i).val();
+    }
 
-	projectJSON = JSON.stringify(project);
-	console.log(projectJSON);
-	console.log(project);
+    projectJSON = JSON.stringify(project);
+    console.log(projectJSON);
+    console.log(project);
     //Add to UndoStack
     updateProject(projectJSON, project);
 
-	$.ajax({
-		type: "POST",
-		url: "http://cinemeow.herokuapp.com/editproject",
-		data: "id="+project._id+"&data="+projectJSON,
-		success: function(data) {
-			console.log("successfully updated "+data);
-			$("#change_message").text("Changes saved automatically");
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			console.log(errorThrown);
-			$("#change_message").css("color: #FF0000;");
-			$("#change_message").text("Warning: Error saving changes");
-		}
-	});
+    $.ajax({
+        type: "POST",
+        url: "http://cinemeow.herokuapp.com/editproject",
+        data: "id="+project._id+"&data="+projectJSON,
+        success: function(data) {
+            console.log("successfully updated "+data);
+            $("#change_message").text("Changes saved automatically");
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(errorThrown);
+            $("#change_message").css("color: #FF0000;");
+            $("#change_message").text("Warning: Error saving changes");
+        }
+    });
 }
 
 //Video Clips Menu
@@ -311,8 +355,15 @@ $(function(){
       var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
       $("#clipcontainer" +1).append('<div id="dragclip'+1+'" class="dragclip drag" style="background-color:'+color+'"> some other clip </div>');
       */
-    retrieveVideos();
 
+    var numclips = 2;
+    var i = 0;
+    for(i = 0; i < numclips; i++) {
+       $("#drag-clipsviewer").append('<table id="clipsource'+i+'" class="clip_source" style="width: 530px;"> </table>');
+       $("#clipsource" + i).append('<tr><td><div id="dragclone'+0+'" class="drag_clone">drag</div></td>' +
+            '<td><div id="clipcontainer'+i+'" class="clip_container" style="background-color: #E0F0FF"></div></td></tr>'); 
+    }
+    
     /* X axis only */
     for(var i = 0; i < container_count; i ++){
         $("#dragclip"+i).draggable({
@@ -381,21 +432,6 @@ $(function(){
     }); 
 });
 
-function retrieveVideos() {
-    $("#drag-clipsviewer").empty();
-    $.ajax({
-        type: "GET",
-        url: "/cliplist",
-        success: function(data) {
-            clipList = JSON.parse(data);
-            for (i in clipList) {
-                $("#drag-clipsviewer").append('<table id="clipsource'+i+'" class="clip_source" style="width: 530px;"> </table>');
-                $("#clipsource" + i).append('<tr><td><div id="dragclone'+0+'" class="drag_clone">drag</div></td>' +'<td><div id="clipcontainer'+i+'" class="clip_container" style="background-color: #E0F0FF">'+clipList[i]+'</div></td></tr>'); 
-            }
-        }
-    });
-}
-
 
 function updateUndoRedoButtons(){
     if(project.clips_redo_stack.length > 0){
@@ -423,7 +459,6 @@ function uploadVideo() {
         var params = {Key: file.name, ContentType: file.type, Body:file};
         bucket.putObject(params, function(err, data) {
             $("#change_message").text(err ? 'Error uploading video': 'Video uploaded successfully');
-            retrieveVideos();
         });
     });
 }
