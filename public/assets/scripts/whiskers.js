@@ -93,7 +93,7 @@ function requestPlay(){
 	var dirty = 0;
 	var i = 0;
 	$("video").get(0).play();
-	var starttime, endtime;
+	var starttime, endtime, clip_length;
 
 	$("video").on('timeupdate', function() {
 		if(i == project.clips.length) {
@@ -102,8 +102,11 @@ function requestPlay(){
 			return false;
 		}
 
-		starttime = $("#start" + i).val();
-		endtime = $("#length" + i).val();
+		starttime = parseInt($("#start" + i).val());
+		clip_length = parseInt($("#length" + i).val());
+        endtime = starttime + clip_length;
+
+        console.log(endtime);
 
 		if(this.currentTime != starttime && dirty == 0) {
 			this.currentTime = starttime;
@@ -130,6 +133,7 @@ var rtime = new Date(1, 1, 2000, 12,00,00);
 var timeout = false;
 var delta = 200;
 function addClipToTimeline(i,color){
+    console.log(project.clips.length);
     var scalingFactor = 10;
     var timelineid = "#drag-x";
     var clip=project.clips[i];
@@ -294,6 +298,7 @@ $(function(){
         console.log("width " + (project.clips[i]["end_time"]-project.clips[i]["start_time"])*scalingFactor);
     }*/
     var container_count = 2;
+    /*
     //HARDCODED:
       $("#drag-clipsviewer").append('<table id="clipsource'+0+'"  class= "clip_source" style=" width: 530px, background-color: black"> </table>');
       $("#drag-clipsviewer").append('<table id="clipsource'+1+'"  class= "clip_source" style=" width: 530px, background-color: black"> </table>');
@@ -307,6 +312,16 @@ $(function(){
       $("#clipcontainer" +0).append('<div id="dragclip'+0+'" class="dragclip drag" style="background-color:'+color+'"> some clip </div>');
       var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
       $("#clipcontainer" +1).append('<div id="dragclip'+1+'" class="dragclip drag" style="background-color:'+color+'"> some other clip </div>');
+      */
+
+    var numclips = 2;
+    var i = 0;
+    for(i = 0; i < numclips; i++) {
+       $("#drag-clipsviewer").append('<table id="clipsource'+i+'" class="clip_source" style="width: 530px;"> </table>');
+       $("#clipsource" + i).append('<tr><td><div id="dragclone'+0+'" class="drag_clone">drag</div></td>' +
+            '<td><div id="clipcontainer'+i+'" class="clip_container" style="background-color: #E0F0FF"></div></td></tr>'); 
+    }
+    
     /* X axis only */
     for(var i = 0; i < container_count; i ++){
         $("#dragclip"+i).draggable({
