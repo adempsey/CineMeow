@@ -106,8 +106,6 @@ function requestPlay(){
 		clip_length = parseInt($("#length" + i).val());
         endtime = starttime + clip_length;
 
-        console.log(endtime);
-
 		if(this.currentTime != starttime && dirty == 0) {
 			this.currentTime = starttime;
 			dirty = 1;
