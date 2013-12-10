@@ -57,7 +57,7 @@ var starttime2 = 20;
 var endtime2 = 24;
 
 function init() {
-	$("video").on('loadedmetadata', requestPlay);
+	$("#active_video").on('loadedmetadata', requestPlay);
 }
 
 function getClipsJSON (){
@@ -92,10 +92,10 @@ function clipWasModified(clip){
 function requestPlay(){
 	var dirty = 0;
 	var i = 0;
-	$("video").get(0).play();
+	$("#active_video")[0].play();
 	var starttime, endtime, clip_length;
 
-	$("video").on('timeupdate', function() {
+	$("#active_video").on('timeupdate', function() {
 		if(i == project.clips.length) {
 			this.pause();
 			i = 0;
@@ -119,7 +119,7 @@ function requestPlay(){
 }
 
 function requestPause() {
-	$("video").get(0).pause();
+	$("#active_video")[0].pause();
 }
 
 /* Note: this is assuming:

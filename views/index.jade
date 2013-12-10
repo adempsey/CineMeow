@@ -4,8 +4,11 @@ block content
 	h2(id="title")
 	div(id="main_container")
 		div(id="videoplayer")
-			video(width='512', height='300', controls='controls', id="active_video")
+			video(width='512', height='300', controls='controls', id="eyebrows")
 				source(src='http://media.cinemeow.s3.amazonaws.com/eyebrows.mp4', type='video/mp4')
+					| Your browser does not support the video tag.
+			video(width='512', height='300', controls='controls', id="doggiekiss")
+				source(src='http://media.cinemeow.s3.amazonaws.com/doggiekiss.mp4', type='video/mp4')
 					| Your browser does not support the video tag.
 			div(style="width: 500px; text-align: center;")
 				button(type="button", onclick="requestPlay();") &#9654;
@@ -17,6 +20,7 @@ block content
 				input(type="file", id="fileupload", style="display: none;")
 		div(id="clipsviewer")
 			div(id="drag-clipsviewer")
+
 	div(style="margin-top: 10px;")
 		div(id="drag-x")
 	div(id="info")
