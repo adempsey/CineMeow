@@ -62,7 +62,8 @@ app.post('/newproject', function(req, res) {
 			} else {
 				var newBucket = new AWS.S3({params: {Bucket: bucketname+'.cinemeow'}});
 				newBucket.createBucket(function() {});
-				res.send(200);
+				console.log(inserted);
+				res.send(inserted[0]["_id"], 200);
 			}
 		});
 	});
