@@ -146,7 +146,7 @@ function playClips(source, clip_order){
 }
 
 function requestPause() {
-    var source = $("#videoplayer video:first-child").attr("id")[0].pause();
+    var source = $("#videoplayer video:first-child")[0].pause();
     interval++;
     window.clearInterval(interval);
     console.log("KILLED");
