@@ -332,50 +332,7 @@ function saveClips(update_stack, message) {
 $(function(){
     var container_count = 2;
     retrieveVideos();
-    /*
-    //HARDCODED:
-      $("#drag-clipsviewer").append('<table id="clipsource'+0+'"  class= "clip_source" style=" width: 530px, background-color: black"> </table>');
-      $("#drag-clipsviewer").append('<table id="clipsource'+1+'"  class= "clip_source" style=" width: 530px, background-color: black"> </table>');
-      $("#clipsource" +0).append('<tr> <td> <div id="dragclone'+0+'"  class="drag_clone" > drag </div> </td>'
-                                       +'<td> <div id="clipcontainer'+0+'" class="clip_container" style="background-color: E0F0FF"> </div> </td>'
-                                 +'</tr>');
-      $("#clipsource" +1).append('<tr> <td> <div id="dragclone'+1+'"  class="drag_clone" > drag </div> </td>'
-                                       +' <td> <div id="clipcontainer'+1+'" class="clip_container" style="background-color: E0F0FF"> </div> </td>'
-                                  +' </tr>');
-      var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
-      $("#clipcontainer" +0).append('<div id="dragclip'+0+'" class="dragclip drag" style="background-color:'+color+'"> some clip </div>');
-      var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
-      $("#clipcontainer" +1).append('<div id="dragclip'+1+'" class="dragclip drag" style="background-color:'+color+'"> some other clip </div>');
-      */
     $("video").on('loadedmetadata', retrieveVideos);
-
-    /* X axis only */
-    /*for(var i = 0; i < container_count; i ++){
-        $("#dragclip"+i).draggable({
-                containment: "#clipcontainer" + i,
-                stack: ".dragclip",
-                axis: "x",
-                grid: [1,1],  
-                snap: true,
-                snapTolerance: 5, 
-                stop: function() {
-                    //console.log("saving clips!");
-                    //saveClips();
-                }
-                //,
-                //drag: function(e){
-                //}
-        });
-        $("#dragclip"+i).resizable({
-            handles: 'e, w', 
-            minWidth: 10, //maxwidth will be determined by video clip!
-            minHeight: 70,
-            maxWidth: 500,
-            //containment: "#clipcontainer" + i,
-            //TODO GET CONTAINMENT WORKING DYNAMICALLY
-            //containment: "#drag-clipsviewer"//containment: "#clipcontainer"+i
-        });
-    }*/
 
      $( ".drag_clone" ).draggable({
         helper: function(event) {
