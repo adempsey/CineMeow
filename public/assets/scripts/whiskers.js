@@ -181,12 +181,12 @@ function addClipToTimeline(i,color){
     var timelineid = "#drag-x";
     var clip = project["clips"][i];
     var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
-<<<<<<< HEAD
+
     $(timelineid).append('<div id="drag'+i+'" class="drag clip" style="background-color:'+color+'">'+clip.name+'</div>');
     $("#drag"+i).offset({left: project.clips[i]["timeline_start_time"]*scalingFactor + $(timelineid).offset().left} );
     $("#drag"+i).width((project.clips[i]["clip_length"])*scalingFactor);
 //    console.log("width " + (project.clips[i]["clip_length"])*scalingFactor);
-=======
+
     $(timelineid).append('<div id="drag'+i+'" class="drag clip" style="background-color:'+color+'">'+clip["name"]+'</div>');
     $("#drag"+i).offset({left: clip["timeline_start_time"]*scalingFactor + $(timelineid).offset().left} );
     $("#drag"+i).width((clip["clip_length"])*scalingFactor);
@@ -200,7 +200,6 @@ function addClipToTimeline(i,color){
     $("#start" + i).val(start);
     $("#length" + i).val(width);
 
->>>>>>> c033d564291b89809c3430e8b25b598e9c0f3a15
     $("#drag"+i).draggable({
                     containment: timelineid,
                     stack: ".drag",
@@ -292,12 +291,9 @@ $(function () {
             $('#title').text(project.name);
             $('#created_at').text("Created on "+project.created_at);  
             populateTimelineWithCurrentClips();
-<<<<<<< HEAD
-=======
             init();
             updateUndoRedoButtons();
             updateStack(project["clips"]);
->>>>>>> c033d564291b89809c3430e8b25b598e9c0f3a15
         },
         error: function(XMLHTTPRequest, textStatus, error) {
             console.log(XMLHTTPRequest+" "+error);
@@ -326,7 +322,7 @@ function populateTimelineWithCurrentClips(){
         $("#log").append('<input type="text" id="length'+i+'" value="'+clip["clip_length"]+'"><br/>');
     }
 }
-<<<<<<< HEAD
+
 function saveClips() {
     $("#change_message").text("Saving changes...");
     var projectJSON;
@@ -355,7 +351,7 @@ function saveClips() {
             $("#change_message").text("Warning: Error saving changes");
         }
     });
-=======
+
 function saveClips(update_stack, message) {
 	$("#change_message").text("Saving changes...");
 	var projectJSON;
@@ -384,7 +380,6 @@ function saveClips(update_stack, message) {
 			$("#change_message").text("Warning: Error saving changes");
 		}
 	});
->>>>>>> c033d564291b89809c3430e8b25b598e9c0f3a15
 }
 
 //Video Clips Menu
@@ -493,8 +488,6 @@ $(function(){
     }); 
 });
 
-<<<<<<< HEAD
-=======
 function retrieveVideos() {
     $.ajax({
         type: "GET",
@@ -518,8 +511,6 @@ function retrieveVideos() {
         }
     });
 }
-
->>>>>>> c033d564291b89809c3430e8b25b598e9c0f3a15
 
 function updateUndoRedoButtons(){
     //REDO
