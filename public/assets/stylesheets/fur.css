@@ -30,7 +30,7 @@ body {
 .drag_clone {
     width: 30px;
     max-width: 30px;
-    height: 75px;
+    height: 85px;
     border: 1px solid black;
     cursor: pointer;
     border-top-left-radius:  8px;
