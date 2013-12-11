@@ -291,7 +291,6 @@ $(function () {
             $('#title').text(project.name);
             $('#created_at').text("Created on "+project.created_at);  
             populateTimelineWithCurrentClips();
-            init();
             updateUndoRedoButtons();
             updateStack(project["clips"]);
         },
@@ -322,35 +321,6 @@ function populateTimelineWithCurrentClips(){
         $("#log").append('<input type="text" id="length'+i+'" value="'+clip["clip_length"]+'"><br/>');
     }
 }
-
-function saveClips() {
-    $("#change_message").text("Saving changes...");
-    var projectJSON;
-    for(var i = 0; i < project.clips.length; i++) {
-        project.clips[i]["timeline_start_time"] = $("#start" + i).val();
-        project.clips[i]["clip_length"] = $("#length" + i).val();
-    }
-
-    projectJSON = JSON.stringify(project);
-    console.log(projectJSON);
-    console.log(project);
-    //Add to UndoStack
-    updateProject(projectJSON, project);
-
-    $.ajax({
-        type: "POST",
-        url: "http://cinemeow.herokuapp.com/editproject",
-        data: "id="+project._id+"&data="+projectJSON,
-        success: function(data) {
-            console.log("successfully updated "+data);
-            $("#change_message").text("Changes saved automatically");
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-            console.log(errorThrown);
-            $("#change_message").css("color: #FF0000;");
-            $("#change_message").text("Warning: Error saving changes");
-        }
-    });
 
 function saveClips(update_stack, message) {
 	$("#change_message").text("Saving changes...");
