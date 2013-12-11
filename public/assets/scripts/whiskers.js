@@ -331,9 +331,7 @@ function saveClips(update_stack, message) {
 
 $(function(){
     var container_count = 2;
-<<<<<<< HEAD
     retrieveVideos();
-=======
     /*
     //HARDCODED:
       $("#drag-clipsviewer").append('<table id="clipsource'+0+'"  class= "clip_source" style=" width: 530px, background-color: black"> </table>');
@@ -397,7 +395,6 @@ $(function(){
         revert: "invalid",
     });
 
->>>>>>> 73d9aaac8802a3163ddf4b8995381685caba0019
     $( "#drag-x").droppable({
             accept: ".drag_clone",
             activeClass: "ui-state-hover",
