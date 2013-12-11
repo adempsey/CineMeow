@@ -76,7 +76,7 @@ body {
     width: 540px;
 }
 
-#videoplayer{
+#player_container, #player_container{
     display: inline-block;
     background-color: #E0F0FF;
     width: 540px;
