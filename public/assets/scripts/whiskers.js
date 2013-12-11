@@ -11,6 +11,16 @@ function addClipToData(clip){
         }
     }
     clips_data.push(clip);
+	//Insert clip in chronological index\
+	for(var i = 0; i < project.clips.length; i ++){
+		if(project.clips[i].timeline_start_time > clip.timeline_start_time){
+			project.clips.splice(i, 0, clip);
+			return;
+		}
+	}
+    for(var i = 0; i < project.clips.length; i ++){
+        project.clips[i]["clip_id"] = i;
+    }
 }
 
 //If clip is updated, its time might change, so remove it and reinsert it into the array 
@@ -154,9 +164,10 @@ function requestPause() {
 var rtime = new Date(1, 1, 2000, 12,00,00);
 var timeout = false;
 var delta = 200;
+ var scalingFactor = 10;
 function addClipToTimeline(i,color){
     console.log(project.clips.length);
-    var scalingFactor = 10;
+   
     var timelineid = "#drag-x";
     var clip=project.clips[i];
     var color="#"+Math.floor(((1/(1+clip["clip_id"]))*7216)+15770000).toString(16); // lol
@@ -329,6 +340,9 @@ function saveClips(update_stack, message) {
 
 $(function(){
     populatePlayer();
+    var container_count = 2;
+    retrieveVideos();
+    $("video").on('loadedmetadata', retrieveVideos);
 
      $( ".drag_clone" ).draggable({
         helper: function(event) {
@@ -418,13 +432,15 @@ function retrieveVideos() {
                     $("#drag-clipsviewer").append('</tr>');
                     cliprow++;
                 }
+                duration = $("#eyebrows")[0].duration*scalingFactor + "px";
+                console.log("DURATION " + duration);
                 $( "#dragclone" +i).draggable({
                     helper: function(event) {
                         var clone = $(event.target).clone();
                         clone.removeClass(".drag_clone");
                         clone.addClass(".drag");
                         clone.css({ "background-color": "orange", //TODO: color of clip in viewer 
-                                    "width": "75px",
+                                    "width": duration,
                                     "height": "75px",
                                     "minWidth": "75px",
                                     "minHeight": "75px",
