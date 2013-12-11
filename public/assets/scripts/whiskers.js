@@ -76,37 +76,35 @@ function clipWasModified(clip){
 //Request Play 
 function requestPlay(){
     var source = $("#videoplayer video:first-child").attr("id");
-    playClips(source, 0);
+    playClips(source);
 }
 
 var interval = 0;
 
-function playClips(source, clip_order){
+function playClips(source){
     console.log("===STARTING PLAYCLIPS===");
     console.log(project.clips);
     var dirty = 0;
     var swap = 0;
-    var i = clip_order;
     var swap_i;
+    var i = 0;
     var nextsource;
-    $("#" + source)[0].play();
+    $("video").hide();
+    $("#" + source).show();
     var starttime, endtime, clip_length;
     console.log("source: " + source + " i: " + i + " len: " + project.clips.length);
 
+    // init start times
+    $("#" + source)[0].currentTime = parseInt($("#start" + i).val());
+    $("#" + source)[0].play();
+
     var callback = function() {
         console.log("i: " + i);
-        if(i == project.clips.length) {
-            $("#" + source)[0].pause();
-            window.clearInterval(interval);
-            console.log("STOPPED");
-            return false;
-        }
+        console.log("callback interval: " + interval);
 
         if(i+1 < project.clips.length) {
             nextsource = project.clips[i+1]["source"];
             nextsource = nextsource.slice(0, -4);
-            console.log("i+1: " + nextsource);
-            console.log("swap var: " + swap);
 
             if(nextsource != source && swap == 0) {
                 console.log("nextsource is diff: " + nextsource);
@@ -121,34 +119,48 @@ function playClips(source, clip_order){
         endtime = starttime + clip_length;
 
         // sets start of specified clip to play
-        if($("#" + source)[0].currentTime != starttime && dirty == 0) {
+        /*if($("#" + source)[0].currentTime != starttime && dirty == 0) {
             $("#" + source)[0].currentTime = starttime;
             dirty = 1;
-        }
+        }*/
 
         // move to the next clip
-        if($("#" + source)[0].currentTime > endtime && dirty == 1) {
+        if($("#" + source)[0].currentTime > endtime) {
             console.log("I made it!");
-            dirty = 0;
             i++;
 
             if(swap == 1 && i == swap_i) {
                 console.log("swapping to: " + nextsource);
                 $("#" + source)[0].pause();
                 swap = 0;
+                $("#" + source).hide();
                 source = nextsource;
+                $("#" + source).show();
+                $("#" + source)[0].currentTime = parseInt($("#start" + i).val());
                 $("#" + source)[0].play();
+                return false;
+            } else if(i < project.clips.length) {
+                dirty = 1;
+                $("#" + source)[0].currentTime = parseInt($("#start" + i).val());
+            } else {
+                $("#" + source)[0].pause();
+                                console.log("CALLBACK INTERVAL: " + interval);
+                window.clearInterval(interval);
+                console.log("===PLAYTHROUGH COMPLETE===");
                 return false;
             }
         }
     };
 
-    var interval = window.setInterval(callback, 1000);
+    callback();
+    interval = window.setInterval(callback, 1000);
 }
 
 function requestPause() {
-    var source = $("#videoplayer video:first-child")[0].pause();
-    interval++;
+    var source = $("video").each(function() {
+        this.pause();
+    });
+    console.log("PAUSE INTERVAL: " + interval);
     window.clearInterval(interval);
     console.log("KILLED");
 }
