@@ -417,6 +417,18 @@ $(function(){
                 //TODO: make it the color of the clip being dragged in 
                 var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
                 $("#drag-x").append('<div id="drag'+10+'" class="drag clip" style="background-color:'+color+'"> ADDED </div>');
+
+                var newclip = {
+                  name: "gggg",
+                  clip_id: "0",
+                  timeline_start_time: "5.9",
+                  clip_start_time: "20.9",
+                  clip_length: "1",
+                  source: "eyebrows.mp4"
+                };
+
+                addClipToData(newclip);
+                populateTimelineWithCurrentClips();
             }
 
     }); 
