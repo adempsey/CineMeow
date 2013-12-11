@@ -11,18 +11,6 @@ function addClipToData(clip){
 	clips_data.push(clip);
 }
 
-//Remove clip from data
-function removeClipFromData(clip){
-	var clip_id = clip.clip_id;
-	for(var i = 0; i < clips_data.length; i ++){
-		if(clips_data[i].clip_id == clip_id){
-			clips_data.splice(i,1);
-		}
-		return;
-	}
-	console.log("clip not found in data array");
-}
-
 //If clip is updated, its time might change, so remove it and reinsert it into the array 
 function updateClip(clip){
 	removeClipFromData(clip);
