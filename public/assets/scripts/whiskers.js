@@ -137,7 +137,7 @@ function addClipToTimeline(i,color){
     var scalingFactor = 10;
     var timelineid = "#drag-x";
     var clip=project.clips[i];
-    var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
+    var color="#"+Math.floor(((1/(1+clip["clip_id"]))*7216)+15770000).toString(16); // lol
     $(timelineid).append('<div id="drag'+i+'" class="drag clip" style="background-color:'+color+'">'+clip.name+'</div>');
     $("#drag"+i).offset({left: clip["timeline_start_time"]*scalingFactor + $(timelineid).offset().left} );
     $("#drag"+i).width((clip["clip_length"])*scalingFactor);
