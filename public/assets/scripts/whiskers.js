@@ -1,3 +1,5 @@
+var mediaURL = "http://media.cinemeow.s3.amazonaws.com/";
+
 //Adds video at correct location, and generates an ID for it?
 function addClipToData(clip){
 	//Insert clip in chronological index\
@@ -82,8 +84,6 @@ function requestPlay(){
 var interval = 0;
 
 function playClips(source){
-    console.log("===STARTING PLAYCLIPS===");
-    console.log(project.clips);
     var dirty = 0;
     var swap = 0;
     var swap_i;
@@ -92,24 +92,18 @@ function playClips(source){
     $("video").hide();
     $("#" + source).show();
     var starttime, endtime, clip_length;
-    console.log("source: " + source + " i: " + i + " len: " + project.clips.length);
 
     // init start times
     $("#" + source)[0].currentTime = parseInt($("#start" + i).val());
     $("#" + source)[0].play();
 
     var callback = function() {
-        console.log("i: " + i);
-        console.log("callback interval: " + interval);
-
         if(i+1 < project.clips.length) {
             nextsource = project.clips[i+1]["source"];
             nextsource = nextsource.slice(0, -4);
 
             if(nextsource != source && swap == 0) {
-                console.log("nextsource is diff: " + nextsource);
                 swap_i = i+1;
-                console.log("swap_i: " + swap_i);
                 swap = 1;
             }
         }
@@ -118,19 +112,11 @@ function playClips(source){
         clip_length = parseInt($("#length" + i).val());
         endtime = starttime + clip_length;
 
-        // sets start of specified clip to play
-        /*if($("#" + source)[0].currentTime != starttime && dirty == 0) {
-            $("#" + source)[0].currentTime = starttime;
-            dirty = 1;
-        }*/
-
         // move to the next clip
         if($("#" + source)[0].currentTime > endtime) {
-            console.log("I made it!");
             i++;
 
             if(swap == 1 && i == swap_i) {
-                console.log("swapping to: " + nextsource);
                 $("#" + source)[0].pause();
                 swap = 0;
                 $("#" + source).hide();
@@ -144,9 +130,7 @@ function playClips(source){
                 $("#" + source)[0].currentTime = parseInt($("#start" + i).val());
             } else {
                 $("#" + source)[0].pause();
-                                console.log("CALLBACK INTERVAL: " + interval);
                 window.clearInterval(interval);
-                console.log("===PLAYTHROUGH COMPLETE===");
                 return false;
             }
         }
@@ -160,9 +144,7 @@ function requestPause() {
     var source = $("video").each(function() {
         this.pause();
     });
-    console.log("PAUSE INTERVAL: " + interval);
     window.clearInterval(interval);
-    console.log("KILLED");
 }
 
 /* Note: this is assuming:
@@ -349,7 +331,73 @@ function saveClips(update_stack, message) {
 
 $(function(){
     var container_count = 2;
+<<<<<<< HEAD
     retrieveVideos();
+=======
+    /*
+    //HARDCODED:
+      $("#drag-clipsviewer").append('<table id="clipsource'+0+'"  class= "clip_source" style=" width: 530px, background-color: black"> </table>');
+      $("#drag-clipsviewer").append('<table id="clipsource'+1+'"  class= "clip_source" style=" width: 530px, background-color: black"> </table>');
+      $("#clipsource" +0).append('<tr> <td> <div id="dragclone'+0+'"  class="drag_clone" > drag </div> </td>'
+                                       +'<td> <div id="clipcontainer'+0+'" class="clip_container" style="background-color: E0F0FF"> </div> </td>'
+                                 +'</tr>');
+      $("#clipsource" +1).append('<tr> <td> <div id="dragclone'+1+'"  class="drag_clone" > drag </div> </td>'
+                                       +' <td> <div id="clipcontainer'+1+'" class="clip_container" style="background-color: E0F0FF"> </div> </td>'
+                                  +' </tr>');
+      var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
+      $("#clipcontainer" +0).append('<div id="dragclip'+0+'" class="dragclip drag" style="background-color:'+color+'"> some clip </div>');
+      var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
+      $("#clipcontainer" +1).append('<div id="dragclip'+1+'" class="dragclip drag" style="background-color:'+color+'"> some other clip </div>');
+      */
+    $("video").on('loadedmetadata', retrieveVideos);
+
+    /* X axis only */
+    /*for(var i = 0; i < container_count; i ++){
+        $("#dragclip"+i).draggable({
+                containment: "#clipcontainer" + i,
+                stack: ".dragclip",
+                axis: "x",
+                grid: [1,1],  
+                snap: true,
+                snapTolerance: 5, 
+                stop: function() {
+                    //console.log("saving clips!");
+                    //saveClips();
+                }
+                //,
+                //drag: function(e){
+                //}
+        });
+        $("#dragclip"+i).resizable({
+            handles: 'e, w', 
+            minWidth: 10, //maxwidth will be determined by video clip!
+            minHeight: 70,
+            maxWidth: 500,
+            //containment: "#clipcontainer" + i,
+            //TODO GET CONTAINMENT WORKING DYNAMICALLY
+            //containment: "#drag-clipsviewer"//containment: "#clipcontainer"+i
+        });
+    }*/
+
+     $( ".drag_clone" ).draggable({
+        helper: function(event) {
+            var clone = $(event.target).clone();
+            clone.removeClass(".drag_clone");
+            clone.addClass(".drag");
+            clone.css({ "background-color": "orange", //TODO: color of clip in viewer 
+                        "width": "75px",
+                        "height": "75px",
+                        "minWidth": "75px",
+                        "minHeight": "75px",
+                        "border-radius":"8px",
+                        "opacity": ".7",
+                        "border":"none" });
+            return clone;
+        },
+        revert: "invalid",
+    });
+
+>>>>>>> 73d9aaac8802a3163ddf4b8995381685caba0019
     $( "#drag-x").droppable({
             accept: ".drag_clone",
             activeClass: "ui-state-hover",
@@ -374,6 +422,8 @@ $(function(){
             }
 
     }); 
+
+
 });
 
 function retrieveVideos() {
@@ -386,6 +436,11 @@ function retrieveVideos() {
             $("#drag-clipsviewer").empty();
             $("#drag-clipsviewer").append('<table id="cliprepo">');
             for (i in clipList) {
+                // populate player
+                //var id = clipList[i]
+                //$("#videoplayer").prepend("<video width='512' height='300' controls='controls', id=" )
+
+                // populate repo
                 if (i % 5 == 0) {
                     $("#cliprepo").append('<tr id="cliprow'+cliprow+'" class="clip_source" style="width: 530px">');
                 } 
