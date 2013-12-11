@@ -1,3 +1,5 @@
+var mediaURL = "http://media.cinemeow.s3.amazonaws.com/";
+
 //Adds video at correct location, and generates an ID for it?
 function addClipToData(clip){
 	//Insert clip in chronological index\
@@ -81,8 +83,6 @@ function requestPlay(){
 var interval = 0;
 
 function playClips(source){
-    console.log("===STARTING PLAYCLIPS===");
-    console.log(project.clips);
     var dirty = 0;
     var swap = 0;
     var swap_i;
@@ -91,24 +91,18 @@ function playClips(source){
     $("video").hide();
     $("#" + source).show();
     var starttime, endtime, clip_length;
-    console.log("source: " + source + " i: " + i + " len: " + project.clips.length);
 
     // init start times
     $("#" + source)[0].currentTime = parseInt($("#start" + i).val());
     $("#" + source)[0].play();
 
     var callback = function() {
-        console.log("i: " + i);
-        console.log("callback interval: " + interval);
-
         if(i+1 < project.clips.length) {
             nextsource = project.clips[i+1]["source"];
             nextsource = nextsource.slice(0, -4);
 
             if(nextsource != source && swap == 0) {
-                console.log("nextsource is diff: " + nextsource);
                 swap_i = i+1;
-                console.log("swap_i: " + swap_i);
                 swap = 1;
             }
         }
@@ -117,19 +111,11 @@ function playClips(source){
         clip_length = parseInt($("#length" + i).val());
         endtime = starttime + clip_length;
 
-        // sets start of specified clip to play
-        /*if($("#" + source)[0].currentTime != starttime && dirty == 0) {
-            $("#" + source)[0].currentTime = starttime;
-            dirty = 1;
-        }*/
-
         // move to the next clip
         if($("#" + source)[0].currentTime > endtime) {
-            console.log("I made it!");
             i++;
 
             if(swap == 1 && i == swap_i) {
-                console.log("swapping to: " + nextsource);
                 $("#" + source)[0].pause();
                 swap = 0;
                 $("#" + source).hide();
@@ -143,9 +129,7 @@ function playClips(source){
                 $("#" + source)[0].currentTime = parseInt($("#start" + i).val());
             } else {
                 $("#" + source)[0].pause();
-                                console.log("CALLBACK INTERVAL: " + interval);
                 window.clearInterval(interval);
-                console.log("===PLAYTHROUGH COMPLETE===");
                 return false;
             }
         }
@@ -159,9 +143,7 @@ function requestPause() {
     var source = $("video").each(function() {
         this.pause();
     });
-    console.log("PAUSE INTERVAL: " + interval);
     window.clearInterval(interval);
-    console.log("KILLED");
 }
 
 /* Note: this is assuming:
@@ -372,7 +354,7 @@ $(function(){
       var color="#"+Math.floor((Math.random()*7216)+15770000).toString(16); // lol
       $("#clipcontainer" +1).append('<div id="dragclip'+1+'" class="dragclip drag" style="background-color:'+color+'"> some other clip </div>');
       */
-    retrieveVideos();
+    $("video").on('loadedmetadata', retrieveVideos);
 
     /* X axis only */
     /*for(var i = 0; i < container_count; i ++){
@@ -444,6 +426,8 @@ $(function(){
             }
 
     }); 
+
+
 });
 
 function retrieveVideos() {
@@ -456,6 +440,11 @@ function retrieveVideos() {
             $("#drag-clipsviewer").empty();
             $("#drag-clipsviewer").append('<table id="cliprepo">');
             for (i in clipList) {
+                // populate player
+                //var id = clipList[i]
+                //$("#videoplayer").prepend("<video width='512' height='300' controls='controls', id=" )
+
+                // populate repo
                 if (i % 5 == 0) {
                     $("#cliprepo").append('<tr id="cliprow'+cliprow+'" class="clip_source" style="width: 530px">');
                 } 
