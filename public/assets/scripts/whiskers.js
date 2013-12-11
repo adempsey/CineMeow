@@ -90,25 +90,16 @@ function playClips(source){
     var nextsource;
     $("video").hide();
     $("#" + source).show();
-    //$("#" + source)[0].play();
     var starttime, endtime, clip_length;
     console.log("source: " + source + " i: " + i + " len: " + project.clips.length);
 
     // init start times
-    //$("#" + source)[0].currentTime = parseInt($("#start" + i).val());
+    $("#" + source)[0].currentTime = parseInt($("#start" + i).val());
+    $("#" + source)[0].play();
 
     var callback = function() {
-        if(source == "doggiekiss") {
-            console.log($("#" + source)[0].currentTime);
-        }
-
         console.log("i: " + i);
-        if(i == project.clips.length) {
-            $("#" + source)[0].pause();
-            window.clearInterval(interval);
-            console.log("===PLAYTHROUGH COMPLETE===");
-            return false;
-        }
+        console.log("callback interval: " + interval);
 
         if(i+1 < project.clips.length) {
             nextsource = project.clips[i+1]["source"];
@@ -127,15 +118,14 @@ function playClips(source){
         endtime = starttime + clip_length;
 
         // sets start of specified clip to play
-        if($("#" + source)[0].currentTime != starttime && dirty == 0) {
+        /*if($("#" + source)[0].currentTime != starttime && dirty == 0) {
             $("#" + source)[0].currentTime = starttime;
             dirty = 1;
-        }
+        }*/
 
         // move to the next clip
-        if($("#" + source)[0].currentTime > endtime && dirty == 1) {
+        if($("#" + source)[0].currentTime > endtime) {
             console.log("I made it!");
-            dirty = 0;
             i++;
 
             if(swap == 1 && i == swap_i) {
@@ -148,18 +138,28 @@ function playClips(source){
                 $("#" + source)[0].currentTime = parseInt($("#start" + i).val());
                 $("#" + source)[0].play();
                 return false;
+            } else if(i < project.clips.length) {
+                dirty = 1;
+                $("#" + source)[0].currentTime = parseInt($("#start" + i).val());
+            } else {
+                $("#" + source)[0].pause();
+                                console.log("CALLBACK INTERVAL: " + interval);
+                window.clearInterval(interval);
+                console.log("===PLAYTHROUGH COMPLETE===");
+                return false;
             }
         }
     };
 
-    var interval = window.setInterval(callback, 800);
+    callback();
+    interval = window.setInterval(callback, 1000);
 }
 
 function requestPause() {
     var source = $("video").each(function() {
         this.pause();
     });
-    interval++;
+    console.log("PAUSE INTERVAL: " + interval);
     window.clearInterval(interval);
     console.log("KILLED");
 }
