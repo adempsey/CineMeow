@@ -75,37 +75,44 @@ function clipWasModified(clip){
 //Request Play 
 function requestPlay(){
     var source = $("#videoplayer video:first-child").attr("id");
-    playClips(source, 0);
+    playClips(source);
 }
 
 var interval = 0;
 
-function playClips(source, clip_order){
+function playClips(source){
     console.log("===STARTING PLAYCLIPS===");
     console.log(project.clips);
     var dirty = 0;
     var swap = 0;
-    var i = clip_order;
     var swap_i;
+    var i = 0;
     var nextsource;
-    $("#" + source)[0].play();
+    $("video").hide();
+    $("#" + source).show();
+    //$("#" + source)[0].play();
     var starttime, endtime, clip_length;
     console.log("source: " + source + " i: " + i + " len: " + project.clips.length);
 
+    // init start times
+    //$("#" + source)[0].currentTime = parseInt($("#start" + i).val());
+
     var callback = function() {
+        if(source == "doggiekiss") {
+            console.log($("#" + source)[0].currentTime);
+        }
+
         console.log("i: " + i);
         if(i == project.clips.length) {
             $("#" + source)[0].pause();
             window.clearInterval(interval);
-            console.log("STOPPED");
+            console.log("===PLAYTHROUGH COMPLETE===");
             return false;
         }
 
         if(i+1 < project.clips.length) {
             nextsource = project.clips[i+1]["source"];
             nextsource = nextsource.slice(0, -4);
-            console.log("i+1: " + nextsource);
-            console.log("swap var: " + swap);
 
             if(nextsource != source && swap == 0) {
                 console.log("nextsource is diff: " + nextsource);
@@ -135,18 +142,23 @@ function playClips(source, clip_order){
                 console.log("swapping to: " + nextsource);
                 $("#" + source)[0].pause();
                 swap = 0;
+                $("#" + source).hide();
                 source = nextsource;
+                $("#" + source).show();
+                $("#" + source)[0].currentTime = parseInt($("#start" + i).val());
                 $("#" + source)[0].play();
                 return false;
             }
         }
     };
 
-    var interval = window.setInterval(callback, 1000);
+    var interval = window.setInterval(callback, 800);
 }
 
 function requestPause() {
-    var source = $("#videoplayer video:first-child")[0].pause();
+    var source = $("video").each(function() {
+        this.pause();
+    });
     interval++;
     window.clearInterval(interval);
     console.log("KILLED");
