@@ -401,7 +401,7 @@ function populatePlayer() {
                 var clipname = clipfile.slice(0, -4);
                 var clipURL = mediaURL + clipfile;
                 console.log(clipURL);
-                $("#videoplayer").append("<video style='display: none;' width='512' height='300' controls='controls' id='" + clipname + "'><source src='" + clipURL + "' type='video/mp4'>Your browser doesn't support video!</video>");
+                $("#videoplayer").append("<video style='display: none;' width='512' height='300' id='" + clipname + "'><source src='" + clipURL + "' type='video/mp4'>Your browser doesn't support video!</video>");
             }
 
             var source = project.clips[0]["source"].slice(0, -4);
