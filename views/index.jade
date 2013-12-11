@@ -5,24 +5,19 @@ block content
 	h2(id="title")
 	div(id="main_container")
 		div(id="videoplayer")
-			video(width='512', height='300', controls='controls', id="eyebrows")
+			video(width='512', height='300', controls='controls')
 				source(src='http://media.cinemeow.s3.amazonaws.com/eyebrows.mp4', type='video/mp4')
 					| Your browser does not support the video tag.
-			video(width='512', height='300', controls='controls', id="doggiekiss")
-				source(src='http://media.cinemeow.s3.amazonaws.com/doggiekiss.mp4', type='video/mp4')
-					| Your browser does not support the video tag.
-			div(style="width: 500px; text-align: center;" id="")
+			div(style="width: 500px; text-align: center;")
 				button(type="button", onclick="requestPlay();") &#9654;
 				button(type="button", onclick="requestPause();") &#x25FC;
 				button(type="button", onclick="saveClips();") Save
 				button(type="button", id="undo", disabled="true", onclick="undo(project)") UNDO
-				button(type="button", id="redo", disabled="true", onclick="redo(project)") REDO
 				button(type="button", id="redo", disabled="false", onclick="redo(project)") REDO
 				button(type="button", id="uploadButton", onclick="uploadVideo()") Upload Video
 				input(type="file", id="fileupload", style="display: none;")
 		div(id="clipsviewer")
 			div(id="drag-clipsviewer")
-
 	div(style="margin-top: 10px;")
 		div(id="drag-x")
 	div(id="info")

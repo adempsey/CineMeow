@@ -32,52 +32,36 @@ function addSourceVideoToProject(project_id, videoClip){
 	//Or manage ids another way
 }
 
-
-var clips_stack = [];
-var clips_redo_stack = [];
 //Add clips to project clips stack
-function updateStack(clips_data){
-	//var clips_data = JSON.parse(clips_data_JSON);
-	console.log("DATA RECEIVED " + clips_data);
-	//var clone = jQuery.extend(true, {}, clips_data);
-	
-	//var clone = {};
-	//jQuery.extend(clone,clips_data);
-
-	clips_stack.unshift(clone(clips_data));
-
-	console.log("DATA");
-	console.log(JSON.stringify(clips_data));
-	/*if(clips_stack.length > maxClipsStackSize){
-		clips_stack.pop();
-	}*/
-	clips_redo_stack = [];
+function updateProject(clips_data_JSON, project){
+	var clips_data = JSON.parse(clips_data_JSON);
+	if(!project.clips_stack){
+		project.clips_stack = [];
+	}
+	project.clips_stack.unshift(clips_data.clips);
+	if(project.clips_stack.length > maxClipsStackSize){
+		project.clips_stack.pop();
+	}
+	project.clips_redo_stack = [];
 	updateUndoRedoButtons();
 }
 
 //Undo last modifications to clips in project
 function undo(project){
-	console.log("ON TOP OF CLIPS STACK: " + clips_stack[1]);
-	project["clips"] = clone(clips_stack[1]);
-	clips_redo_stack.unshift(clips_stack.shift());
-	if(clips_redo_stack.length > maxClipsStackSize){
-		clips_redo_stack.pop();
+	project.clips_redo_stack.unshift(project.clips_stack.shift());
+	if(project.clips_redo_stack.length > maxClipsStackSize){
+		project.clips_redo_stack.pop();
 	}
-	populateTimelineWithCurrentClips();
 	updateUndoRedoButtons();
-	saveClips(false, "undo");
 }
 
 //Redo last modification to clips in project
 function redo(project){
-	clips_stack.unshift(clips_redo_stack.shift());
-	project["clips"] = clone(clips_stack[0]);
-	if(clips_stack.length > maxClipsStackSize){
-		clips_stack.pop();
+	project.clips_stack.unshift(project.clips_redo_stack.shift());
+	if(project.clips_stack.length > maxClipsStackSize){
+		project.clips_stack.pop();
 	}
-	populateTimelineWithCurrentClips();
 	updateUndoRedoButtons();
-	saveClips(false, "redo");
 }
 
 
@@ -105,36 +89,4 @@ function getProjectFromServer (){
 function test(){
 	console.log("Testing server protocols:");
 	getProjectFromServer();
-}
-
-function clone(obj) {
-    // Handle the 3 simple types, and null or undefined
-    if (null == obj || "object" != typeof obj) return obj;
-
-    // Handle Date
-    if (obj instanceof Date) {
-        var copy = new Date();
-        copy.setTime(obj.getTime());
-        return copy;
-    }
-
-    // Handle Array
-    if (obj instanceof Array) {
-        var copy = [];
-        for (var i = 0, len = obj.length; i < len; i++) {
-            copy[i] = clone(obj[i]);
-        }
-        return copy;
-    }
-
-    // Handle Object
-    if (obj instanceof Object) {
-        var copy = {};
-        for (var attr in obj) {
-            if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
-        }
-        return copy;
-    }
-
-    throw new Error("Unable to copy obj! Its type isn't supported.");
 }
