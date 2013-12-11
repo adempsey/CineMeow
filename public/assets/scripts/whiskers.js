@@ -375,7 +375,7 @@ $(function(){
     retrieveVideos();
 
     /* X axis only */
-    for(var i = 0; i < container_count; i ++){
+    /*for(var i = 0; i < container_count; i ++){
         $("#dragclip"+i).draggable({
                 containment: "#clipcontainer" + i,
                 stack: ".dragclip",
@@ -400,15 +400,7 @@ $(function(){
             //TODO GET CONTAINMENT WORKING DYNAMICALLY
             //containment: "#drag-clipsviewer"//containment: "#clipcontainer"+i
         });
-    }
-    
-    /* $(".drag_clone" ).mouseover(function () {
-        $(this).css('opacity', '1');
-    });
-    $(".drag_clone" ).mouseout(function () {
-        $(this).css('opacity', '.7');
-    });*/
-
+    }*/
 
      $( ".drag_clone" ).draggable({
         helper: function(event) {
@@ -455,11 +447,28 @@ function retrieveVideos() {
                 if (i % 5 == 0) {
                     $("#cliprepo").append('<tr id="cliprow'+cliprow+'" class="clip_source" style="width: 530px">');
                 } 
-                $("#cliprow" + cliprow).append('<td><div id="dragclone'+0+'" class="drag_clone">drag</div></td>' +'<td><div id="clipcontainer'+i+'" class="clip_container" style="background-color: #E0F0FF">'+clipList[i]+'</div></td>'); 
+                $("#cliprow" + cliprow).append('<td><div id="dragclone'+i+'" class="drag_clone">drag</div></td>' +'<td><div id="clipcontainer'+i+'" class="clip_container" style="background-color: #E0F0FF">'+clipList[i]+'</div></td>'); 
                 if (i % 5 == 4) {
                     $("#drag-clipsviewer").append('</tr>');
                     cliprow++;
                 }
+                $( "#dragclone" +i).draggable({
+                    helper: function(event) {
+                        var clone = $(event.target).clone();
+                        clone.removeClass(".drag_clone");
+                        clone.addClass(".drag");
+                        clone.css({ "background-color": "orange", //TODO: color of clip in viewer 
+                                    "width": "75px",
+                                    "height": "75px",
+                                    "minWidth": "75px",
+                                    "minHeight": "75px",
+                                    "border-radius":"8px",
+                                    "opacity": ".7",
+                                    "border":"none" });
+                        return clone;
+                    },
+                    revert: "invalid",
+                });
             }
             $("#drag-clipsviewer").append('</table>');
         }
