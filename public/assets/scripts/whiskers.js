@@ -90,38 +90,82 @@ function clipWasModified(clip){
 }
 //Request Play 
 function requestPlay(){
-	var dirty = 0;
-	var i = 0;
-	$("video").get(0).play();
-	var starttime, endtime, clip_length;
+    var source = $("#videoplayer video:first-child").attr("id");
+    playClips(source, 0);
+}
 
-	$("video").on('timeupdate', function() {
-		if(i == project.clips.length) {
-			this.pause();
-			i = 0;
-			return false;
-		}
+var interval = 0;
 
-		starttime = parseInt($("#start" + i).val());
-		clip_length = parseInt($("#length" + i).val());
+function playClips(source, clip_order){
+    console.log("===STARTING PLAYCLIPS===");
+    console.log(project.clips);
+    var dirty = 0;
+    var swap = 0;
+    var i = clip_order;
+    var swap_i;
+    var nextsource;
+    $("#" + source)[0].play();
+    var starttime, endtime, clip_length;
+    console.log("source: " + source + " i: " + i + " len: " + project.clips.length);
+
+    var callback = function() {
+        console.log("i: " + i);
+        if(i == project.clips.length) {
+            $("#" + source)[0].pause();
+            window.clearInterval(interval);
+            console.log("STOPPED");
+            return false;
+        }
+
+        if(i+1 < project.clips.length) {
+            nextsource = project.clips[i+1]["source"];
+            nextsource = nextsource.slice(0, -4);
+            console.log("i+1: " + nextsource);
+            console.log("swap var: " + swap);
+
+            if(nextsource != source && swap == 0) {
+                console.log("nextsource is diff: " + nextsource);
+                swap_i = i+1;
+                console.log("swap_i: " + swap_i);
+                swap = 1;
+            }
+        }
+
+        starttime = parseInt($("#start" + i).val());
+        clip_length = parseInt($("#length" + i).val());
         endtime = starttime + clip_length;
 
-        console.log(endtime);
+        // sets start of specified clip to play
+        if($("#" + source)[0].currentTime != starttime && dirty == 0) {
+            $("#" + source)[0].currentTime = starttime;
+            dirty = 1;
+        }
 
-		if(this.currentTime != starttime && dirty == 0) {
-			this.currentTime = starttime;
-			dirty = 1;
-		}
+        // move to the next clip
+        if($("#" + source)[0].currentTime > endtime && dirty == 1) {
+            console.log("I made it!");
+            dirty = 0;
+            i++;
 
-		if(this.currentTime > endtime && dirty == 1) {;
-			dirty = 0;
-			i++;
-		}
-	});
+            if(swap == 1 && i == swap_i) {
+                console.log("swapping to: " + nextsource);
+                $("#" + source)[0].pause();
+                swap = 0;
+                source = nextsource;
+                $("#" + source)[0].play();
+                return false;
+            }
+        }
+    };
+
+    var interval = window.setInterval(callback, 1000);
 }
 
 function requestPause() {
-	$("video").get(0).pause();
+    var source = $("#videoplayer video:first-child").attr("id")[0].pause();
+    interval++;
+    window.clearInterval(interval);
+    console.log("KILLED");
 }
 
 /* Note: this is assuming:
