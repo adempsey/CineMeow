@@ -56,10 +56,6 @@ var endtime = 15;
 var starttime2 = 20;
 var endtime2 = 24;
 
-function init() {
-	$("video").on('loadedmetadata', requestPlay);
-}
-
 function getClipsJSON (){
 	return clips_data_JSON;
 }
@@ -288,7 +284,6 @@ $(function () {
             populateTimelineWithCurrentClips();
             updateUndoRedoButtons();
             updateStack(project["clips"]);
-            init();
         },
         error: function(XMLHTTPRequest, textStatus, error) {
             console.log(XMLHTTPRequest+" "+error);
